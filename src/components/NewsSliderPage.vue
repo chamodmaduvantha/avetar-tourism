@@ -1,0 +1,699 @@
+<template>
+  <section class="awards-section" aria-labelledby="highlights-heading">
+    <div class="container">
+      <div class="section-header" data-aos="fade-up">
+        <h1 class="section-title">
+          OUR <span class="highlight">HIGHLIGHTS</span>
+        </h1>
+        <p class="section-subtitle">Celebrating our achievements and memorable moments</p>
+      </div>
+
+      <div class="swiper-container">
+        <swiper
+          :modules="[Autoplay, Navigation, Pagination]"
+          :slides-per-view="1"
+          :space-between="30"
+          :loop="true"
+          :autoplay="{ delay: 4000, disableOnInteraction: false }"
+          :pagination="{ clickable: true, dynamicBullets: true }"
+          :navigation="{ nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }"
+          :breakpoints="{
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 }
+          }"
+          class="highlights-swiper"
+          aria-label="Highlights and achievements carousel"
+        >
+          <swiper-slide v-for="(award, index) in awards" :key="index">
+            <div class="award-card">
+              <div class="card-image">
+                <img :src="award.src" :alt="award.title" />
+                <div class="image-overlay">
+                  <div class="overlay-content">
+                    <h3>{{ award.title }}</h3>
+                    <p>{{ award.subtitle }}</p>
+                    <button class="view-details-btn">View Details</button>
+                  </div>
+                </div>
+              </div>
+              <div class="card-content">
+                <h3 class="card-title">{{ award.title }}</h3>
+                <p class="card-description">
+                  {{ award.description }}
+                  <a v-if="award.link" :href="award.link" target="_blank" rel="noopener noreferrer" class="card-link">Watch here</a>
+                </p>
+                <div class="card-footer">
+                  <span class="date-badge">{{ award.year }}</span>
+                  <div class="social-icons" aria-label="Social media sharing options">
+                    <button class="icon-btn" aria-label="Share on Facebook">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+                      </svg>
+                    </button>
+                    <button class="icon-btn"  aria-label="Share on Twitter">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
+
+        <!-- Custom Navigation -->
+        <div class="swiper-navigation">
+          <button class="swiper-button swiper-button-prev" aria-label="Previous highlight">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/271/271220.png" 
+              alt="Previous slide" 
+              class="nav-image"
+            />
+          </button>
+          <button class="swiper-button swiper-button-next" aria-label="Next highlight">
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/271/271228.png" 
+              alt="Next slide" 
+              class="nav-image"
+            />
+          </button>
+        </div>
+      </div>
+
+      <div class="view-all-container">
+        <button class="view-all-btn" aria-label="View all highlights">View All Highlights</button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
+export default {
+  name: 'AwardsSection',
+  components: {
+    Swiper,
+    SwiperSlide
+  },
+  data() {
+    return {
+      awards: [
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/BestWeb%202026/0-1.jpg", 
+          title: "BestWeb.LK 2026 Awards Ceremony", 
+          subtitle: "CCBE’s Educational Excellence | BestWeb.LK 2026", 
+          description: "CCBE has been honoured with two prestigious awards at BestWeb.LK 2026, being recognized as Sri Lanka’s Most Popular Education Website and a Bronze Winner for Best Education Website.",
+          year: "August 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/CCBE%20ONE%20Opening/0.1.jpg", 
+          title: "CCBE ONE - Grand Opening", 
+          subtitle: "Experience the Pulse of Cambrians !!", 
+          description: "The grand opening of CCBE One on 20th July 2026 marked the beginning of an exciting new journey for the CCBE family. From inspiring moments to unforgettable celebrations, this milestone reflects our commitment to excellence, innovation, and empowering future generations.",
+          year: "July 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Cambridge%20Awards%20-%202026/37.jpeg", 
+          title: "Cambridge Awards 2026", 
+          subtitle: "Celebrating Outstanding Achievements of CCBE Students", 
+          description: "Nearly 1,000 students who successfully completed Cambridge English Qualifications from Pre A1 Starters to C2 Proficiency were recognized and celebrated for their outstanding achievements.",
+          year: "June 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/CCBE%20-%20Cover%20Song/1000479548.jpg", 
+          title: "♪ දෙපිය නගලා... | Official Cover Song by CCBE Students", 
+          subtitle: "Celebrating the Father's Day 2026",
+          link: "https://youtu.be/AC1pIXhzwcE?si=p8uRQGfczIaTPcz-", 
+          description: "For the silent love of a father who makes a lot of sacrifices but never shows it to his children, CCBE presents to you, දෙපිය නගලා..!!, a song sung by our own children. ",
+          year: "June 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Awards/Linguaskill.jpeg", 
+          title: "Authorised for Cambridge Linguaskill", 
+          subtitle: "Authorised for Cambridge Linguaskill by Cambridge English", 
+          description: "CCBE International (Pvt) Ltd, LK114 is proud to announce that we are now Authorised for Cambridge Linguaskill by Cambridge English, alongside being an Authorised Cambridge English Exam Centre.",
+          year: "June 2026"
+        },
+        // { 
+        //   src: "https://ik.imagekit.io/u3wbiya66/MIS/Mathugama.jpeg", 
+        //   title: "CCBE | New Branch", 
+        //   subtitle: "New Branch Opening", 
+        //   description: "A big surprise awaits!! CCBE's newest branch is coming soon to Matugama.",
+        //   year: "June 2026"
+        // },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/CCBE%20-%20Cover%20Song/Cover%20Song.jpeg", 
+          title: "♪ අම්මේ, මං නුඹට ආදරෙයි... | Official Cover Song by CCBE Students", 
+          subtitle: "Celebrating the Mother's Day 2026", 
+          link: "https://youtu.be/Cp0hjgMYsdI",
+          description: "For the never-ending, silent love of a mother, CCBE presents to you, අම්මේ, මං නුඹට ආදරෙයි..!!, a song sung by our own children.",
+          year: "May 2026"
+        },
+        //{ 
+          //src: "https://ik.imagekit.io/kp5tixhur/New%20Year/new%20year.jpeg", 
+          //title: "New Year Celebrations 2026", 
+          //subtitle: "Celebrating the Spirit of Sinhala & Tamil New Year", 
+          //description: " CCBE All Branches wishes you a joyful and prosperous Sinhala & Tamil New Year!!. May this festive season bring happiness, success, and new beginnings to everyone as we celebrate the true spirit of Aurudu together",
+          //year: "APR 2026"
+        //},
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Trinity%20College/GESE.jpeg", 
+          title: "Trinity College Sign Up", 
+          subtitle: "Opening Doors to Academic Excellence", 
+          description: "Proud to announce the Trinity College sign-up initiative, providing students with new opportunities to access world-class education pathways and strengthen their academic journey through trusted international programs.",
+          year: "APR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/TopWeb/TopWeb%20-%20March.jpeg", 
+          title: "TopWeb - March 2026", 
+          subtitle: "Empowering Digital Innovation & Web Excellence", 
+          description: "Our website www.ccbe.lk has been recognized with the TopWeb.lk Award – March 2026, highlighting our commitment to quality, innovation, and digital excellence.",
+          year: "MAR 2026"
+        },
+        //{ 
+          //src: "https://ik.imagekit.io/kp5tixhur/Iftar%20celebration/Iftar1.jpg", 
+          //title: "Iftar Celebration 2026", 
+          //subtitle: "An Evening of Unity, Reflection & Togetherness", 
+          //description: "The Iftar Celebration 2026 at CCBE was a meaningful gathering that brought staff together to break fast during the holy month of Ramadan. The event reflected the values of unity, respect, and cultural diversity, creating a warm and inclusive atmosphere for everyone.",
+          //year: "MAR 2026"
+        //},
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/IELTS%20Partner%20Forum%202026/ielts3.jpeg", 
+          title: "IELTS Partner Forum 2026", 
+          subtitle: "Strengthening Partnerships for Global Education", 
+          description: "Honored to participate in the IELTS Partner Forum 2026 - an inspiring evening of partnership, dialogue, and shared vision for the future. Our participation reflects a shared dedication to building partnerships and advancing excellence together.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Cambridge%20English%20Awards%20Ceremony%202026/BC-South.jpeg", 
+          title: "British Council Awards Ceremony 2026", 
+          subtitle: "Celebrating Excellence in English Language Achievement", 
+          description: "CCBE is proud to receive the Southern Regional Award at British Council Ceremony 2026. This achievement reflects our continued excellence and strong presence in the region. ",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Cambridge%20English%20Awards%20Ceremony%202026/IELTS%202.jpeg", 
+          title: "British Council Awards Ceremony 2026", 
+          subtitle: "Celebrating Excellence in English Language Achievement", 
+          description: "CCBE is Proudly recognized as the Platinum Award Winner for Cambridge English Qualifications registrations in 2026.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/Galduwa%202026/WhatsApp%20Image%202026-04-20%20at%2011.57.24%20AM.jpeg", 
+          title: "Galdoowa Buddhist Monastery Program 2026", 
+          subtitle: "A Day of Meritorious Deeds & Unity", 
+          description: "On this Madin Full Moon Poya Day, the staff and management of CCBE and CCIT came together to successfully organize our 2nd consecutive Charity Program at Kalyana Yogashramaya.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/u3wbiya66/News&Events/NE8.jpeg", 
+          title: "INTERNATIONAL WOMEN'S DAY 2026", 
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE", 
+          description: "International Women’s Day 2026 was celebrated at CCBE, honoring the strength and achievements of women while highlighting our commitment to empowering them through education and opportunities.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/kp5tixhur/WOMENS%20DAY%202026/post%203.jpeg", 
+          title: "INTERNATIONAL WOMEN'S DAY 2026", 
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE", 
+          description: "International Women’s Day 2026 was celebrated at CCBE, honoring the strength and achievements of women while highlighting our commitment to empowering them through education and opportunities.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/u3wbiya66/News&Events/NE7.jpeg", 
+          title: "INTERNATIONAL WOMEN'S DAY 2026", 
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE", 
+          description: "International Women’s Day 2026 was celebrated at CCBE, honoring the strength and achievements of women while highlighting our commitment to empowering them through education and opportunities.",
+          year: "MAR 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/u3wbiya66/News&Events/NE6.jpeg", 
+          title: "CAMBRIANS DAY 2026", 
+          subtitle: "Celebrating Unity, Talent & the Spirit of Cambrians", 
+          description: "Cambrians Day 2026 brought together staff from all branches to celebrate the true spirit of being a Cambrian through engaging activities and inspiring moments that strengthened unity and teamwork.",
+          year: "JAN 2026"
+        },
+        { 
+          src: "https://ik.imagekit.io/u3wbiya66/News&Events/NE4.jpeg", 
+          title: "Staff Wellness & Medical Screening Program 2025", 
+          subtitle: "Caring for Our Team, Building a Healthier CCBE", 
+          description: "The Staff Wellness & Medical Screening Program 2025 promoted the health and well-being of staff across all branches, encouraging healthy lifestyles and early detection of health concerns.",
+          year: "2025"
+        },
+        // { 
+        //   src: "https://ik.imagekit.io/u3wbiya66/Highlights/1.jpg", 
+        //   title: "Children's Day Awareness", 
+        //   subtitle: "Empowering our kids through an insightful session", 
+        //   description: "Collaboration with Sri Lanka Police for a 'Good Touch and Bad Touch' session to help children learn, understand, and stay confident in their safety.",
+        //   year: "2025"
+        // },
+        // { 
+        //   src: "https://ik.imagekit.io/u3wbiya66/Highlights/4.jpg", 
+        //   title: "Happy Children's Day!", 
+        //   subtitle: "Celebrating our bright, kind, and curious stars", 
+        //   description: "To our bright, kind, and curious little stars keep dreaming big and believing in yourself every step of the way.",
+        //   year: "2025"
+        // },
+        // { 
+        //   src: "https://ik.imagekit.io/u3wbiya66/Highlights/3.jpg", 
+        //   title: "Honoring Our Everyday Heroes", 
+        //   subtitle: "They don't wear capes, but they build heroes", 
+        //   description: "To all our teachers who inspire, guide, and ignite dreams — we thank you today and always for your dedication and passion.",
+        //   year: "2025"
+        // },
+        { 
+          src: "https://ik.imagekit.io/u3wbiya66/Highlights/2.jpg", 
+          title: "A Decade of Dedication", 
+          subtitle: "Ten years of redefining English education", 
+          description: "Marking ten years of excellence, our institute held a Pirith Chanting and Almsgiving ceremony with the blessings of the Maha Sangha.",
+          year: "2025"
+        },
+        // { 
+        //   src: "https://ik.imagekit.io/u3wbiya66/Highlights/5.jpg", 
+        //   title: "Cambridge English Awards 2025", 
+        //   subtitle: "Honoring our Pro School Achievers", 
+        //   description: "Celebrating our High Achievers and Top Achievers a night of pride, passion, and excellence that truly lit up the stage.",
+        //   year: "2025"
+        // },
+      ]
+    }
+  },
+  setup() {
+    return {
+      Autoplay,
+      Navigation,
+      Pagination
+    }
+  },
+  mounted() {
+    // Ensure equal heights after component is mounted
+    this.$nextTick(() => {
+      this.equalizeCardHeights();
+    });
+  },
+  methods: {
+    equalizeCardHeights() {
+      // Set equal height for all cards
+      const cards = document.querySelectorAll('.award-card');
+      if (cards.length === 0) return;
+      
+      let maxHeight = 0;
+      
+      // Reset heights to auto to get actual heights
+      cards.forEach(card => {
+        card.style.height = 'auto';
+      });
+      
+      // Find the maximum height
+      cards.forEach(card => {
+        const cardHeight = card.offsetHeight;
+        if (cardHeight > maxHeight) {
+          maxHeight = cardHeight;
+        }
+      });
+      
+      // Set all cards to the maximum height
+      cards.forEach(card => {
+        card.style.height = `${maxHeight}px`;
+      });
+    }
+  }
+}
+</script>
+
+<style scoped>
+.awards-section {
+  padding: 30px 0 80px;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #FBB700;
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.highlight {
+  color: #ff6b35;
+  position: relative;
+}
+
+/* .highlight::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b35, #f7931e);
+  border-radius: 3px;
+} */
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.swiper-container {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.highlights-swiper {
+  padding: 20px 10px 50px;
+}
+
+/* Ensure all swiper slides have the same height */
+:deep(.swiper-slide) {
+  height: auto;
+  display: flex;
+}
+
+.award-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.4s ease;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.award-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.card-link {
+  display: inline-block;
+  margin-left: 4px;
+  color: #ff6b35;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+.card-image {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  flex-shrink: 0; /* Prevent image from shrinking */
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.award-card:hover .card-image img {
+  transform: scale(1.05);
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 107, 53, 0.85), rgba(247, 147, 30, 0.9));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  padding: 20px;
+}
+
+.award-card:hover .image-overlay {
+  opacity: 1;
+}
+
+.overlay-content {
+  text-align: center;
+  color: white;
+}
+
+.overlay-content h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.overlay-content p {
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.view-details-btn {
+  background: white;
+  color: #ff6b35;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+  background: #f8f9fa;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card-content {
+  padding: 25px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.card-description {
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex-grow: 1;
+  /* Limit text to 3 lines with ellipsis if needed */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-align: justify;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto; /* Push footer to bottom */
+  flex-shrink: 0; /* Prevent footer from shrinking */
+}
+
+.date-badge {
+  background: #ff6b35;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.social-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icon-btn {
+  background: #f8f9fa;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #6c757d;
+}
+
+.icon-btn:hover {
+  background: #ff6b35;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.swiper-navigation {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.swiper-button {
+  background: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.swiper-button:hover {
+  background: #ff6b35;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.swiper-button:active {
+  transform: translateY(-1px);
+}
+
+/* Navigation Images */
+.nav-image {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+.swiper-button:hover .nav-image {
+  filter: brightness(0) invert(1);
+  transform: scale(1.1);
+}
+
+:deep(.swiper-pagination-bullet) {
+  width: 12px;
+  height: 12px;
+  background: #dee2e6;
+  opacity: 1;
+}
+
+:deep(.swiper-pagination-bullet-active) {
+  background: #ff6b35;
+}
+
+.view-all-container {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.view-all-btn {
+  background: linear-gradient(90deg, #ff6b35, #f7931e);
+  color: white;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+}
+
+.view-all-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+}
+
+.view-all-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .awards-section {
+    padding: 60px 0;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .card-image {
+    height: 200px;
+  }
+  
+  .card-content {
+    padding: 20px;
+  }
+  
+  .swiper-navigation {
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  .card-image {
+    height: 180px;
+  }
+  
+  .swiper-button {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .nav-image {
+    width: 20px;
+    height: 20px;
+  }
+}
+</style>

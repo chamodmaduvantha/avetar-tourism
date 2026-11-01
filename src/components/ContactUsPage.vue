@@ -1,0 +1,602 @@
+<template>
+  <div>
+    <NavBar></NavBar>
+    <div class="container">
+
+      <div class="logo-container" data-aos="zoom-in-up" data-aos-duration="2000">
+        <img :src="logo" alt="Company Logo" width="200" height="150" id="logo">
+      </div>
+
+      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
+        CONTACT <span class="highlight">US</span>
+      </h1>
+
+      <p class="subtitle" data-aos="fade-up" data-aos-duration="2000">
+        At the heart of our commitment to communication and service lies our dedication to ensuring every interaction is meaningful, responsive, and supportive.
+      </p>
+
+      <!-- Contact Info Cards -->
+      <div class="contact-info-grid" data-aos="fade-up" data-aos-duration="2000">
+        <div class="contact-info-card">
+          <div class="info-body">
+            <h3 class="info-title">Call Us</h3>
+            <p><a href="tel:+94713999666" class="info-link">+94 71 399 9666</a> (Hot Line)</p>
+            <p><a href="tel:+94713999666" class="info-link">+94 91 223 7373</a> (Galle College)</p>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="info-body">
+            <h3 class="info-title">Email Us</h3>
+            <p><a href="mailto:info@ccbe.lk" class="info-link">info@ccbe.lk</a></p>
+            <p class="info-note">We respond within 24 hours on business days.</p>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="info-body">
+            <h3 class="info-title">Opening Hours</h3>
+            <p><b>Mon – Fri :</b> 8:15 AM – 6:00 PM</p>
+            <p><b>Sat & Sun :</b> 7:00 AM – 6:00 PM</p>
+          </div>
+        </div>
+        <div class="contact-info-card">
+          <div class="info-body">
+            <h3 class="info-title">Follow Us</h3>
+            <div class="social-links">
+              <a href="https://www.facebook.com/ccbe.ambalangoda" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
+              <a href="https://www.instagram.com/ccbeamb" target="_blank" rel="noopener" class="social-btn ig">Instagram</a>
+              <a href="https://www.youtube.com/@ccbeinternational" target="_blank" rel="noopener" class="social-btn yt">YouTube</a>
+              <a href="https://www.tiktok.com/@cambridgecollege9" target="_blank" rel="noopener" class="social-btn tk">TikTok</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
+        OUR <span class="highlight">BRANCH NETWORK</span>
+      </h1>
+
+      <div class="center-container-Branch">
+        <!-- Image Container -->
+        <div class="image-container">
+          <!-- Main Image -->
+          <img
+            data-aos="zoom-out"
+            data-aos-duration="2000"
+            width="390"
+            height="490"
+            :src="branchNetworkImage"
+            alt="Branch Network"
+            class="branch-image"
+          >
+
+          <!-- Ambalangoda -->
+          <div
+            class="point"
+            :style="{ top: '74.5%', left: '36%' }"
+            @click="navigateTo('/about/ambalangoda')"
+          >
+            <span class="point-tooltip">Ambalangoda College</span>
+          </div>
+
+          <!-- Galle -->
+          <div
+            class="point"
+            :style="{ top: '82%', left: '42%' }"
+            @click="navigateTo('/about/galle')"
+          >
+            <span class="point-tooltip">Galle College</span>
+          </div>
+
+          <!-- Matara -->
+          <div
+            class="point"
+            :style="{ top: '81%', left: '57%'}"
+            @click="navigateTo('/about/matara')"
+          >
+            <span class="point-tooltip point-tooltip-right">Matara College</span>
+          </div>
+
+          <!-- Piliyandala -->
+          <div
+            class="point"
+            :style="{ top: '64.8%', left: '36.5%' }"
+            @click="navigateTo('/about/piliyandala')"
+          >
+            <span class="point-tooltip">Piliyandala College</span>
+          </div>
+
+          <!-- Kalutara -->
+          <div
+            class="point"
+            :style="{ top: '65%', left: '30.5%' }"
+            @click="navigateTo('/about/kalutara')"
+          >
+            <span class="point-tooltip">Kalutara College</span>
+          </div>
+
+          <!-- Horana -->
+          <div
+            class="point"
+            :style="{ top: '68.5%', left: '34%' }"
+            @click="navigateTo('/about/horana')"
+          >
+            <span class="point-tooltip">Horana College</span>
+          </div>
+
+          <!-- Matugama -->
+          <div
+            class="point"
+            :style="{ top: '68.5%', left: '38.5%' }"
+            @click="navigateTo('/about/matugama')"
+          >
+            <span class="point-tooltip">Matugama College</span>
+          </div>
+
+          <!-- Beliatta -->
+          <div
+            class="point"
+            :style="{ top: '75.5%', left: '72%' }"
+            @click="navigateTo('/about/beliatta')"
+          >
+            <span class="point-tooltip">Beliatta College</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div v-if="selectedOffice" class="text-center">
+        <h3>{{ selectedOffice.name }}</h3>
+        <p>{{ selectedOffice.address }}</p>
+        <p>{{ selectedOffice.phone }}</p>
+      </div>
+
+      <!-- Branch Cards -->
+      <div class="branch-cards-grid" data-aos="fade-up" data-aos-duration="2000">
+        <div
+          v-for="(office, index) in offices"
+          :key="index"
+          class="branch-card"
+          :class="{ 'branch-card--active': selectedOffice && selectedOffice.name === office.name }"
+          @click="selectOffice(office)"
+        >
+          <div class="branch-card-body">
+            <h4 class="branch-card-name">{{ office.name }}</h4>
+            <p class="branch-card-addr">{{ office.address }}</p>
+            <a :href="'tel:' + office.phone.replace(/\s/g,'')" class="branch-card-phone" @click.stop>{{ office.phone }}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Back to Home Link -->
+      <div class="home-link-section" data-aos="fade-up" data-aos-duration="1500">
+        <p>Looking for something else?</p>
+        <a href="/" class="home-link-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Back to Home
+        </a>
+        <div class="quick-nav-links">
+          <a href="/courses" class="qnl">Our Programmes</a>
+          <a href="/about" class="qnl">About CCBE</a>
+          <a href="/news" class="qnl">News & Events</a>
+          <a href="/corevalues" class="qnl">Core Values</a>
+        </div>
+      </div>
+
+    </div>
+    <ChatBot></ChatBot>
+    <FooterPage></FooterPage>
+  </div>
+</template>
+
+<script>
+import NavBar from "./NavBar.vue";
+import FooterPage from "./FooterPage.vue";
+import ChatBot from "./ChatBot.vue";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+export default {
+  name: "ContactUs",
+  components: {
+    NavBar,
+    FooterPage,
+    ChatBot
+  },
+  data() {
+    return {
+      logo: require('@/assets/Logo.png'),
+      branchNetworkImage: require('@/assets/Branch_Network2.png'),
+      offices: [
+        { name: "Galle College",       address: "No 118, Old Matara Rd, Galle, 80000",                  phone: "+94 91 223 7373" },
+        { name: "Ambalangoda College", address: "No 97, New Rd, Ambalangoda, 80300",                    phone: "+94 91 225 2452" },
+        { name: "Matara College",      address: "No 352, Kumarathunga Mw, Matara, 81000",               phone: "+94 41 205 0200" },
+        { name: "Piliyandala College", address: "No 119, Moratuwa Rd, Suwarapola, Piliyandala, 10300",  phone: "+94 11 218 0008" },
+        { name: "Horana College",      address: "No 149, Graceland Circular Rd, Horana, 12400",         phone: "+94 34 220 5503" }, 
+        { name: "Kalutara College",    address: "No 85, Maha Waskaduwa, Waskaduwa, 12580",              phone: "+94 34 212 1210" },
+        { name: "Matugama College",    address: "No 57/D, Aluthgama Rd, Matugama, 12100",               phone: "+94 34 212 1477" },
+        { name: "Beliatta College",    address: "Opposite Bus Stand, No 50 Tangalle Rd, Beliatta 82400",phone: "+94 47 225 2175" },  
+      ],
+      selectedOffice: null,
+    };
+  },
+  methods: {
+    navigateTo(route) { 
+      this.$router.push(route); 
+    },
+    selectOffice(office) { 
+      this.selectedOffice = office; 
+    },
+  },
+  mounted() {
+    AOS.init();
+  },
+};
+</script>
+
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 80px;
+}
+
+.title {
+  color: #FBB700;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.highlight { color: #FF5F15; }
+
+.subtitle {
+  font-size: 1.2rem !important;
+  color: #555 !important;
+  text-align: center !important;
+  margin: 20px 0 !important;
+  line-height: 1.5 !important;
+  font-weight: normal !important;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+#logo { display: block; }
+
+/* Contact Info Cards */
+.contact-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 32px 0 40px;
+}
+
+.contact-info-card {
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 14px;
+  padding: 20px 18px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.contact-info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(251,183,0,0.14);
+}
+
+.info-body { flex: 1; }
+
+.info-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #FBB700;
+  margin: 0 0 8px;
+}
+
+.info-body p {
+  font-size: 0.85rem;
+  color: #555;
+  margin: 3px 0;
+  line-height: 1.4;
+}
+
+.info-link {
+  color: #FF5F15;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.info-link:hover { text-decoration: underline; }
+
+.info-note {
+  font-size: 0.78rem !important;
+  color: #888 !important;
+  font-style: italic;
+}
+
+.social-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+.social-btn {
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+
+.social-btn.fb { background: #1877f2; color: #fff; }
+.social-btn.fb:hover { background: #1565c0; }
+.social-btn.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
+.social-btn.ig:hover { opacity: 0.88; }
+.social-btn.yt { background: #dc2743; color: #fff; }
+.social-btn.tk { background: #333; color: #fff; }
+
+/* Branch Network Map */
+.center-container-Branch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 390px;
+  height: 490px;
+  margin: 30px auto;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.branch-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.point {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main yellow dot */
+.point::before {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: rgb(255, 230, 0);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgba(255, 230, 0, 0.9);
+  animation: pulse-grow 2s infinite;
+}
+
+/* Glow wave effect */
+.point::after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 243, 7, 0.889);
+  border-radius: 50%;
+  animation: wave 2s infinite;
+}
+
+/* Tooltip beside point */
+.point-tooltip {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  color: black;
+  padding: 10px 18px;
+  border: 2px solid #222;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  z-index: 100;
+}
+
+/* Tooltip for right side (Matara) */
+.point-tooltip-right {
+  left: auto;
+  right: 30px;
+}
+
+/* Show tooltip on hover */
+.point:hover .point-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Branch Cards */
+.branch-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0 40px;
+}
+
+.branch-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #fff;
+  border: 2px solid #f0f0f0;
+  border-radius: 14px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.branch-card:hover,
+.branch-card--active {
+  border-color: #FBB700;
+  box-shadow: 0 6px 20px rgba(251,183,0,0.16);
+  transform: translateY(-2px);
+}
+
+.branch-card-body { flex: 1; min-width: 0; }
+
+.branch-card-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 4px;
+  text-align: left;
+}
+
+.branch-card-addr {
+  font-size: 0.78rem;
+  color: #888;
+  margin: 0 0 4px;
+  line-height: 1.3;
+  text-align: left;
+}
+
+.branch-card-phone {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #FF5F15;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.branch-card-phone:hover { text-decoration: underline; }
+
+/* Back to Home */
+.home-link-section {
+  text-align: center;
+  padding: 32px 0 16px;
+}
+
+.home-link-section > p {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.home-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: #FBB700;
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(251,183,0,0.3);
+}
+
+.home-link-btn:hover {
+  background: #e0a500;
+  transform: translateY(-2px);
+}
+
+.quick-nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.qnl {
+  font-size: 0.85rem;
+  color: #FF5F15;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 14px;
+  border: 1px solid rgba(255,95,21,0.25);
+  border-radius: 30px;
+  transition: all 0.25s;
+}
+
+.qnl:hover {
+  background: #FF5F15;
+  color: #fff;
+  border-color: #FF5F15;
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.text-center h3 { color: #FBB700; margin-bottom: 10px; }
+.text-center p  { color: #555; margin: 5px 0; font-size: 1rem; }
+
+/* Animations */
+@keyframes pulse-grow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%       { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+@keyframes wave {
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(3); }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .branch-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 15px; padding-top: 70px; }
+  .title { font-size: 1.8rem; margin-top: 20px; }
+  .subtitle { font-size: 1.1rem; padding: 0 10px; }
+  .center-container-Branch { width: 300px; height: 380px; }
+  .contact-info-grid { grid-template-columns: 1fr; }
+  .branch-cards-grid { grid-template-columns: 1fr; }
+  #logo { width: 180px; height: auto; }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 10px; padding-top: 60px; }
+  .title { font-size: 1.6rem; }
+  .subtitle { font-size: 1rem; }
+  .center-container-Branch { width: 250px; height: 320px; }
+  #logo { width: 150px; height: auto; }
+  .point { width: 22px; height: 22px; }
+  .point::before,
+  .point::after { width: 12px; height: 12px; }
+  .point-tooltip { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
+  .quick-nav-links { gap: 8px; }
+}
+</style>

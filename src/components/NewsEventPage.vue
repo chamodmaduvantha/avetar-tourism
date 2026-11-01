@@ -1,0 +1,551 @@
+<template>
+  <div>
+    <NavBar></NavBar>
+    <div class="container">
+      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
+        News <span class="highlight">& Events</span>
+      </h1>
+      <br />
+      <p class="paragraph" data-aos="fade-up" data-aos-duration="3000" style="text-align: center;">
+        <b>At Cambridge College of British English (CCBE)</b>, we are constantly evolving to offer our students the best learning experiences. Our upcoming events include language workshops, cultural exchange programs, and exciting new course launches designed to meet the needs of learners of all ages. Whether you're interested in expanding your vocabulary, improving your accent, or exploring advanced language techniques, our events offer unique opportunities for growth. Stay tuned for announcements on our seasonal events, student achievements, and exciting collaborations with language experts. At CCBE, every moment is a chance to learn, connect, and celebrate the joy of mastering English.
+      </p>
+      <br />
+
+      <div class="cards-grid">
+        <!-- Loop through the cards array -->
+        <div v-for="(card, index) in cards" :key="index" class="card-col">
+          <div class="card">
+            <img :src="card.image" class="card-image" alt="News & Events image">
+            
+            <div class="card-title">{{ card.title }}</div>
+            
+            <div class="card-subtitle">{{ card.subtitle }}</div>
+            
+            <div class="card-actions">
+              <div class="spacer"></div>
+              
+              <button class="toggle-btn" @click="toggleCard(index)">
+                <span v-if="card.show" class="icon">▲</span>
+                <span v-else class="icon">▼</span>
+              </button>
+            </div>
+
+            <div class="expand-transition" :style="{ maxHeight: card.show ? '500px' : '0' }">
+              <div class="divider"></div>
+              
+              <div class="card-content">
+                {{ card.content }}
+                <a v-if="card.link" :href="card.link" target="_blank" rel="noopener noreferrer" class="card-link">▶ Watch here</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- ── Back to Home Link ── -->
+      <div class="home-link-section" data-aos="fade-up" data-aos-duration="1500">
+        <p>Looking for something else?</p>
+        <a href="/" class="home-link-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Back to Home
+        </a>
+        <div class="quick-nav-links">
+          <a href="/courses" class="qnl">Our Programmes</a>
+          <a href="/about" class="qnl">About CCBE</a>
+          <!-- <a href="/news" class="qnl">News & Events</a> -->
+          <a href="/corevalues" class="qnl">Core Values</a>
+        </div>
+      </div>
+    <ArrowButton></ArrowButton>
+    <ChatBot></ChatBot>
+    <FooterPage></FooterPage>
+  </div>
+</template>
+
+<script>
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import NavBar from './NavBar.vue';
+import FooterPage from './FooterPage.vue';
+import ChatBot from './ChatBot.vue'
+import ArrowButton from './ArrowButton.vue';
+
+export default {
+  name: 'NewsEventPage',
+  components: {
+    NavBar,
+    FooterPage,
+    ChatBot,
+    ArrowButton
+  },
+  data() {
+    return {
+      // Array of card data
+      cards: [
+              {
+          image: "https://ik.imagekit.io/kp5tixhur/CCBE%20-%20Cover%20Song/Cover3.jpeg",
+          title: "♪ පැන මඩ කඩිති | Official Cover Song by CCBE Students",
+          subtitle: "Teachers’ Day Special Gift from CCBE 2026",
+          content: "ජීවිතයට දැනුම පමණක් නොව, නිවැරදි මඟ පෙන්වා දෙමින්  ආදරණීය දුවා දරුවන්ගේ හෙට දවස ලස්සන කරන ආදරණීය ගුරුවරුන් වෙනුවෙන්... ❤️",
+          link: "https://youtu.be/XQeUIyJXFgc?si=yM6y7siukLDePVsk",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/CCBE%20ONE%20Opening/0.1.jpg",
+          title: "CCBE ONE - Grand Opening",
+          subtitle: "Experience the Pulse of Cambrians !!",
+          content: "The grand opening of CCBE One on 20th July 2026 marked the beginning of an exciting new journey for the CCBE family. From inspiring moments to unforgettable celebrations, this milestone reflects our commitment to excellence, innovation, and empowering future generations.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/Husma%20Project%202026/3.jpeg",
+          title: "🌿 Husma Fruit Plant Dansal 2026",
+          subtitle: "Thank You for Being a Part of the Husma Project 2026",
+          content: "CCBE & CCIT are proud to distribute 6,000 medicinal plants free of charge across our branches for the third consecutive year. Through this initiative, we aim to inspire communities to protect nature, promote sustainability, and contribute to a greener Sri Lanka. Together, let's plant today for a healthier tomorrow.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/Cambridge%20Awards%20-%202026/7.jpeg",
+          title: "Cambridge Awards 2026",
+          subtitle: "Celebrating Outstanding Achievements of CCBE Students",
+          content: "Nearly 1,000 students who successfully completed Cambridge English Qualifications from Pre A1 Starters to C2 Proficiency were recognized and celebrated for their outstanding achievements.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/CCBE%20-%20Cover%20Song/1000479548.jpg",
+          title: "♪ දෙපිය නගලා... | Official Cover Song by CCBE Students",
+          subtitle: "Celebrating the Father's Day 2026",
+          content: "For the silent love of a father who makes a lot of sacrifices but never shows it to his children, CCBE presents to you, දෙපිය නගලා..!!, a song sung by our own children. ",
+          link: "https://youtu.be/AC1pIXhzwcE?si=p8uRQGfczIaTPcz-",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/CCBE%20-%20Cover%20Song/Cover%20Song.jpeg",
+          title: "♪ අම්මේ, මං නුඹට ආදරෙයි... | Official Cover Song by CCBE Students",
+          subtitle: "Celebrating the Mother's Day 2026",
+          content: "For the never-ending, silent love of a mother, CCBE presents to you, අම්මේ, මං නුඹට ආදරෙයි..!!, a song sung by our own children.",
+          link: "https://youtu.be/Cp0hjgMYsdI",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/New%20Year/Aurudu%20Kumara%20-%20Kumariya.jpeg",
+          title: "CCBE Digital Sigithi Awurudu Kumara & Kumariya 2026",
+          subtitle: "Prize Giving Ceremony",
+          content: "The prize giving ceremony of the CCBE Digital Sigithi Awurudu Kumara and Kumari Competition 2026 was successfully held, celebrating the joy and traditions of the Sinhala & Tamil New Year.During the ceremony, prizes were presented to the little stars who participated in this wonderful celebration,along with scholarship vouchers for their next Cambridge Level course, encouraging and supporting their continued learning journey.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE8.jpeg",
+          title: "INTERNATIONAL WOMEN'S DAY 2026",
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE",
+          content: "International Women’s Day 2026 was proudly celebrated at CCBE, honoring the strength, achievements, and inspiration of women everywhere. The occasion highlighted our commitment to empowering women through education, opportunity, and a supportive learning environment that encourages growth and success.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/WOMENS%20DAY%202026/post%203.jpeg",
+          title: "INTERNATIONAL WOMEN'S DAY 2026",
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE",
+          content: "International Women’s Day 2026 was proudly celebrated at CCBE, honoring the strength, achievements, and inspiration of women everywhere. The occasion highlighted our commitment to empowering women through education, opportunity, and a supportive learning environment that encourages growth and success.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE7.jpeg",
+          title: "INTERNATIONAL WOMEN'S DAY 2026",
+          subtitle: "International Women’s Day 2026 was celebrated at CCBE",
+          content: "International Women’s Day 2026 was proudly celebrated at CCBE, honoring the strength, achievements, and inspiration of women everywhere. The occasion highlighted our commitment to empowering women through education, opportunity, and a supportive learning environment that encourages growth and success.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/kp5tixhur/Galduwa%202026/WhatsApp%20Image%202026-04-20%20at%2011.57.24%20AM.jpeg",
+          title: "Galdoowa Buddhist Monastery Program 2026",
+          subtitle: "A Day of Meritorious Deeds & Unity",
+          content: "On this Madin Full Moon Poya Day, the staff and management of CCBE and CCIT came together to successfully organize our 2nd consecutive Charity Program at Kalyana Yogashramaya. \n\n Together, we were honored to conduct: \n ◾ Sathbudu Wandanawa Bodhi Poojawa \n ◾ Heel Daane (Breakfast) and Dahawal Daane (Lunch) offered to 50 venerable monks \n ◾ Meals and refreshments for over 750 Sil observers \n\n This meaningful initiative was made possible through the dedication, generosity, and collective effort of our team. \n A heartfelt thank you to everyone who contributed their time, support, and kindness to make this meritorious event a success.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE1.jpeg",
+          title: "CAMBRIANS DAY 2026",
+          subtitle: "Celebrating Unity, Talent & the Spirit of Cambrians",
+          content: " Cambrians Day 2026 was a vibrant celebration that brought together staff members from all branches to honor the true spirit of being a Cambrian. The day was filled with engaging activities, inspiring moments, and unforgettable memories that strengthened our sense of unity and teamwork. This event highlighted the strong bond and collaboration that connects the entire CCBE staff community. Thank you to everyone who contributed to making Cambrians Day 2026 a meaningful and joyful celebration. Together, we continue to grow stronger as one team.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE2.jpeg",
+          title: "Staff Wellness & Medical Screening Program 2025",
+          subtitle: "Caring for Our Team, Building a Healthier CCBE",
+          content: "The Staff Wellness & Medical Screening Program 2025 was organized to promote the health and well-being of our dedicated staff members across all branches. This initiative aimed to encourage a healthier lifestyle and early detection of health concerns. At CCBE, we believe that a strong institution begins with a healthy team. We extend our sincere appreciation to all medical professionals and staff who took part in making this program a meaningful step towards a healthier and happier working environment.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE3.jpeg",
+          title: "Cambrians Fit to Fight 2025",
+          subtitle: "Standing Together to Support Flood-Affected Communities",
+          content: "Cambrians Fit to Fight 2025 was a meaningful humanitarian initiative organized by CCBE and CCIT to support families affected by recent floods. Through collective effort and compassion, our Cambrians community: including students, parents, and all staff members from every branch came together to provide essential aid and extend a helping hand to those facing difficult times. This project reflects our commitment to social responsibility and the power of unity in moments of need. We sincerely thank everyone who contributed their time, effort, and support to make this initiative a success. Together, we stand strong with our communities.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/NE5.jpeg",
+          title: "කංචුක පූජාව, කිරිපිඬු දානය හා අෂ්ඨපාන පූජාව 2025",
+          subtitle: "ස්වර්ණමාලි මහා සෑය – අනුරාධපුරය",
+          content: " 2025 වසරේදී අනුරාධපුර ශ්‍රී ස්වර්ණමාලි මහා සෑය වෙත කංචුක පූජාව, කිරිපිඬු දානය සහ අෂ්ඨපාන පූජාව භක්තිසම්පන්නව පැවැත්වුණි.",
+          show: false,
+        },
+        // {
+        //   image: "https://ik.imagekit.io/u3wbiya66/News&Events/WhatsApp%20Image%202025-06-08%20at%2010.12.15_fb599a49.jpg?updatedAt=1749452636230",
+        //   title: "🌿 Husma Fruit Plant Dansal 2025",
+        //   subtitle: "Thank You for Being a Part of the Husma Project 2025",
+        //   content: "The Husma Project, first launched by our CCBE Galle branch in 2024 with just 500 plants, has grown into a beautiful island-wide movement. In 2025, thanks to the amazing support from all our branches, the project has flourished reaching 5,000 plants across the country. This initiative reflects our shared commitment to a greener tomorrow and the strength of working together as one. Thank you for being a part of this journey. Together, we breathe life into the future.",
+        //   show: false,
+        // },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/_MG_9895.jpg?updatedAt=1745842133941",
+          title: "Cambrians Awrudu Udanaya",
+          subtitle: "The Cambrians Awurudu Udanaya 2025",
+          content: "A vibrant day filled with traditional games, colorful festivities, cultural performances, and joyful togetherness awaits. Let's come together to honor our rich heritage and create unforgettable memories.",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/481082092_601994946155124_2299747182221281091_n.jpg?updatedAt=1745841751881",
+          title: "MasterChef Kitchen in Action!",
+          subtitle: "Culinary Creations, Teamwork, and Speaking Skills",
+          content: "MasterChef Kitchen in Action! 👨‍🍳🍴\n\nOur talented students stepped into the spotlight to showcase their favorite meals in an exciting culinary event! This wasn't just about cooking—it was an opportunity to blend creativity, teamwork, and communication skills.\n\nFrom sharing their unique recipes to presenting their culinary masterpieces with confidence, the event was a flavorful journey of learning, collaboration, and fun. Students worked together seamlessly, demonstrating their ability to combine flavors and ideas while honing their public speaking skills.\n\nIt was inspiring to witness their passion, teamwork, and creativity come to life in the kitchen. Here's to more delicious moments and skill-building adventures in the future!\n\nStay tuned for highlights, photos, and recipes from this vibrant event! 🌟✨",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/IMG_6630.JPG?updatedAt=1745842202604",
+          title: "Welcoming 2025 with Warmth and Positivity",
+          subtitle: "A Heartfelt New Year Celebration Marking New Beginnings",
+          content: "✨ As we step into 2025, our Galle branch hosted a celebration that radiated warmth and positivity. The event was more than just a New Year gathering—it was a heartfelt occasion filled with joy, reflection, and a shared vision for the year ahead. 🌟\n\nThe team came together to embrace the opportunities and challenges that 2025 will bring. With a sense of unity and optimism, we reflected on the accomplishments of the past year while setting our sights on continued growth and success. This celebration was a reminder of the strong bonds that connect us, and the meaningful impact we aim to make as we move forward, together.\n\nHere's to embracing new opportunities, pursuing excellence, and creating a year filled with meaningful moments. Cheers to a fantastic 2025! 🌱",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/FB_IMG_1738984651465.jpg?updatedAt=1738985253696",
+          "title": "Spreading Festive Cheer with a Secret Santa Celebration",
+          "subtitle": "A Joyful Day of Togetherness at Cambridge College of British English",
+          "content": "🎅✨ We brought the festive cheer to Cambridge College of British English with a delightful Secret Santa celebration! 🎁❤️ Our team shared laughter, exchanged thoughtful gifts, and created heartwarming memories that truly captured the spirit of togetherness. \n\nIt was a day filled with joy, surprises, and the magic of giving! 🎄🎉",
+          show: false,
+        },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/FB_IMG_1738984743534.jpg?updatedAt=1738985253864",
+          "title": "Throwback to Unforgettable Moments from Our Annual Trip",
+          "subtitle": "Breathtaking Views, Adventures, and Team Bonding",
+          "content": "Throwback to the unforgettable moments from our annual trip! 🌟 From breathtaking views and laughter-filled adventures to team bonding and endless joy, every memory is a treasure we'll cherish forever. \n\nHere's to more journeys, stronger connections, and creating magic together! 🏞️✨",
+          show: false,
+        },
+        // {
+        //   image: "https://ik.imagekit.io/u3wbiya66/News&Events/FB_IMG_1738984882674.jpg?updatedAt=1738985253221",
+        //   "title": "Celebrating Success at Cambridge College of British English",
+        //   "subtitle": "Congratulations to Our Students on Achieving A2 Flyers Level!",
+        //   "content": "🎉 Exciting News from Cambridge College of British English 📚\n\nA big congratulations to our incredible students for achieving the Cambridge English Assessment A2 Flyers Level! 🏆✨ Your hard work and dedication continue to inspire us every day. This milestone is just the beginning of your amazing language-learning journey! 🌟🙌\n\nKeep aiming high and chasing your dreams! 🚀✨",
+        //   show: false,
+        // },
+        {
+          image: "https://ik.imagekit.io/u3wbiya66/News&Events/FB_IMG_1738984825665.jpg?updatedAt=1738985254002",
+          title: "Fit to Fight 2025",
+          subtitle: "Our 9th Annual Event a Huge Success!",
+          content: "Heartfelt thanks to everyone who contributed to and supported our 9th annual Fit to Fight event! Your unwavering generosity and dedication have once again demonstrated the power of community and compassion.\n\nThis year's event was a remarkable success, with participants, sponsors, and volunteers coming together to support a noble cause. The funds raised during this event will directly benefit the Cancer Hospital in Karapitiya, providing vital resources for patients and their families.\n\nTogether, we have shown that strength lies in unity, and with your support, we have made a meaningful difference in the lives of those who need it most.\n\nThank you for being a part of this incredible journey. Here's to continuing the fight and spreading hope, one step at a time!\n\nStay tuned for updates, photos, and highlights from the event!",
+          show: false,
+        },
+      ],
+    };
+  },
+  methods: {
+    toggleCard(index) {
+      this.cards[index].show = !this.cards[index].show;
+    },
+    exploreCard(card) {
+      alert(`Exploring: ${card.title}`);
+    },
+  },
+  mounted() {
+    AOS.init();
+  }
+};
+</script>
+
+<style scoped>
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 16px;
+  padding-top: 80px;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  color: #FBB700;
+  text-transform: uppercase;
+  margin-top: 40px;
+}
+
+.highlight {
+  color: #FF5F15;
+}
+
+.paragraph {
+  font-family: "Roboto", sans-serif;
+  font-weight: 14px;
+  font-size: 20px;
+  font-style: normal;
+  text-align: center;
+  line-height: 1.6;
+  color: #333;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin: 40px 0;
+  align-items: start;
+}
+
+.card-col {
+  width: 100%;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  /* height: 100%; */
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  white-space: normal;
+  line-height: 1.4;
+  text-align: center;
+  padding: 16px 16px 8px;
+  color: #333;
+}
+
+.card-subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  white-space: normal;
+  line-height: 1.4;
+  color: #555;
+  text-align: center;
+  padding: 0 16px 16px;
+}
+
+.card-actions {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 8px;
+  color: #FF5F15;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toggle-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+  font-size: 1.5rem;
+  color: #666;
+  line-height: 1;
+}
+
+.expand-transition {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin: 0 16px;
+}
+
+.card-content {
+  padding: 16px;
+  font-family: "Roboto", sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #333;
+  white-space: pre-line;
+}
+
+/* ── Back to Home ───────────────────────────────── */
+.home-link-section {
+  text-align: center;
+  padding: 32px 0 16px;
+}
+
+.home-link-section > p {
+  font-size: 0.95rem;
+  color: #888;
+  margin-bottom: 12px;
+}
+
+.home-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 28px;
+  background: #FBB700;
+  color: #fff;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(251,183,0,0.3);
+}
+
+.home-link-btn:hover {
+  background: #e0a500;
+  transform: translateY(-2px);
+}
+
+.quick-nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.qnl {
+  font-size: 0.85rem;
+  color: #FF5F15;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 5px 14px;
+  border: 1px solid rgba(255,95,21,0.25);
+  border-radius: 30px;
+  transition: all 0.25s;
+}
+
+.qnl:hover {
+  background: #FF5F15;
+  color: #fff;
+  border-color: #FF5F15;
+}
+
+.text-center {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.text-center h3 { color: #FBB700; margin-bottom: 10px; }
+.text-center p  { color: #555; margin: 5px 0; font-size: 1rem; }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .container {
+    padding: 0 12px;
+    padding-top: 60px;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+    margin-top: 30px;
+  }
+  
+  .paragraph {
+    font-size: 18px;
+  }
+  
+  .card-image {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 8px;
+    padding-top: 50px;
+  }
+  
+  .title {
+    font-size: 1.6rem;
+    margin-top: 20px;
+  }
+  
+  .paragraph {
+    font-size: 16px;
+  }
+  
+  .card-image {
+    height: 250px;
+  }
+  
+  .card-title {
+    font-size: 1.1rem;
+    padding: 12px 12px 6px;
+  }
+  
+  .card-subtitle {
+    font-size: 0.9rem;
+    padding: 0 12px 12px;
+  }
+  
+  .card-content {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+}
+</style>
