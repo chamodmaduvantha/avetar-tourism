@@ -10,7 +10,7 @@
       <span class="lk-blob lk-blob-b" aria-hidden="true"></span>
       <div class="lk-wrap lk-intro-grid">
         <div>
-          <p class="lk-eyebrow">Discover Sri Lank</p>
+          <p class="lk-eyebrow">Discover Sri Lanka</p>
           <h1 id="intro-heading" class="lk-h1" data-aos="fade-up" data-aos-duration="1500">
             One island, a thousand ways to see it
           </h1>
