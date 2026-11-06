@@ -30,7 +30,7 @@ const MatugamaBranch    = () => import(/* webpackChunkName: "branches" */ '../co
 const BeliattaBranch    = () => import(/* webpackChunkName: "branches" */ '../components/branches/BeliattaBranch.vue')
 
 // ─────────────────────────────────────────────────────────────────────────
-const BASE_URL = 'https://www.ccbe.lk'
+const BASE_URL = ''
 
 const routes = [
 
@@ -38,7 +38,7 @@ const routes = [
   {
     path: '/', name: 'HomePage', component: HomePage,
     meta: {
-      title: 'Home | Cambridge College of British English',
+      title: 'Home | Avatar Tours',
       description: 'Cambridge College of British English (CCBE) — Sri Lanka\'s premier Cambridge English exam preparation centre. English courses for all ages across 8 branches island-wide.',
       canonical: `${BASE_URL}/`
     }
@@ -238,8 +238,8 @@ const router = createRouter({
 // ── On every navigation: update <title>, <meta description>,
 //    <link canonical>, and Open Graph tags dynamically ─────────────────────
 router.afterEach((to) => {
-  const title       = to.meta?.title       || 'Cambridge College of British English | CCBE Sri Lanka'
-  const description = to.meta?.description || 'Cambridge College of British English (CCBE) — Sri Lanka\'s premier Cambridge English exam preparation centre.'
+  const title       = to.meta?.title       || 'Avatar Tours | Sri Lanka'
+  const description = to.meta?.description || 'Avatar Tours — Sri Lanka.'
   const canonical   = to.meta?.canonical   || `${BASE_URL}${to.path}`
 
   // Title

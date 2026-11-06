@@ -172,18 +172,239 @@
                 <path d="M0,42 C90,64 150,16 230,40 C300,60 350,28 400,44 L400,60 L0,60 Z" fill="#f2b33d" opacity="0.22" />
             </svg>
         </aside>
+
+        <!-- ================= INQUIRY MODAL (NEW) ================= -->
+        <transition name="lk-fade">
+            <div
+                v-if="inquiryOpen"
+                class="lk-modal"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="lk-inq-title"
+                @click.self="closeInquiry"
+            >
+                <div class="lk-modal__panel">
+                    <div class="lk-modal__head">
+                        <div>
+                            <h2 id="lk-inq-title" class="lk-modal__title">Send us an inquiry</h2>
+                            <p class="lk-modal__sub">We usually reply within 24 hours.</p>
+                        </div>
+                        <button class="lk-modal__close" aria-label="Close inquiry" @click="closeInquiry">
+                            <i class="material-icons">close</i>
+                        </button>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div class="lk-tabs" role="tablist">
+                        <button
+                            type="button"
+                            role="tab"
+                            class="lk-tab"
+                            :class="{ 'is-active': inquiryTab === 'quick' }"
+                            :aria-selected="inquiryTab === 'quick' ? 'true' : 'false'"
+                            @click="switchTab('quick')"
+                        >
+                            <i class="material-icons">bolt</i> Quick Inquiry
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            class="lk-tab"
+                            :class="{ 'is-active': inquiryTab === 'travel' }"
+                            :aria-selected="inquiryTab === 'travel' ? 'true' : 'false'"
+                            @click="switchTab('travel')"
+                        >
+                            <i class="material-icons">flight_takeoff</i> Travel Inquiry
+                        </button>
+                    </div>
+
+                    <!-- Success state -->
+                    <div v-if="submitted" class="lk-success">
+                        <i class="material-icons">check_circle</i>
+                        <h3>Thank you, {{ submittedName }}!</h3>
+                        <p>Your inquiry has been received. Our team will contact you shortly.</p>
+                        <button type="button" class="lk-nav-cta" @click="closeInquiry">Close</button>
+                    </div>
+
+                    <!-- Quick Inquiry form -->
+                    <form
+                        v-else-if="inquiryTab === 'quick'"
+                        class="lk-form"
+                        @submit.prevent="submitInquiry"
+                    >
+                        <div class="lk-field lk-field--full">
+                            <label for="q-name">Name</label>
+                            <input id="q-name" v-model.trim="quick.name" type="text" required placeholder="Your full name" />
+                        </div>
+
+                        <div class="lk-field lk-field--full">
+                            <label for="q-email">Email</label>
+                            <input id="q-email" v-model.trim="quick.email" type="email" required placeholder="you@example.com" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="q-arrival">Arrival Date</label>
+                            <input id="q-arrival" v-model="quick.arrival" type="date" :min="today" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="q-departure">Departure Date</label>
+                            <input id="q-departure" v-model="quick.departure" type="date" :min="quick.arrival || today" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="q-persons">Number of Persons</label>
+                            <input id="q-persons" v-model.number="quick.persons" type="number" min="1" max="50" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="q-hotel">Hotel Category</label>
+                            <select id="q-hotel" v-model="quick.hotel" required>
+                                <option value="" disabled>Select category</option>
+                                <option v-for="h in hotelCategories" :key="h" :value="h">{{ h }}</option>
+                            </select>
+                        </div>
+
+                        <p v-if="errorMsg" class="lk-error lk-field--full">{{ errorMsg }}</p>
+
+                        <div class="lk-field--full lk-form__foot">
+                            <button type="submit" class="lk-nav-cta lk-nav-cta--block" :disabled="submitting">
+                                {{ submitting ? 'Sending…' : 'Send Quick Inquiry' }}
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Travel Inquiry form -->
+                    <form
+                        v-else
+                        class="lk-form"
+                        @submit.prevent="submitInquiry"
+                    >
+                        <div class="lk-field">
+                            <label for="t-name">Name</label>
+                            <input id="t-name" v-model.trim="travel.name" type="text" required placeholder="Your full name" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-email">Email</label>
+                            <input id="t-email" v-model.trim="travel.email" type="email" required placeholder="you@example.com" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-phone">Phone / WhatsApp</label>
+                            <input id="t-phone" v-model.trim="travel.phone" type="tel" placeholder="+44 7xxx xxxxxx" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-country">Country</label>
+                            <input id="t-country" v-model.trim="travel.country" type="text" placeholder="Where are you from?" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-arrival">Arrival Date</label>
+                            <input id="t-arrival" v-model="travel.arrival" type="date" :min="today" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-departure">Departure Date</label>
+                            <input id="t-departure" v-model="travel.departure" type="date" :min="travel.arrival || today" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-adults">Adults</label>
+                            <input id="t-adults" v-model.number="travel.adults" type="number" min="1" max="50" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-children">Children</label>
+                            <input id="t-children" v-model.number="travel.children" type="number" min="0" max="50" />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-hotel">Hotel Category</label>
+                            <select id="t-hotel" v-model="travel.hotel" required>
+                                <option value="" disabled>Select category</option>
+                                <option v-for="h in hotelCategories" :key="h" :value="h">{{ h }}</option>
+                            </select>
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-budget">Budget per person (USD)</label>
+                            <select id="t-budget" v-model="travel.budget">
+                                <option value="">Not sure yet</option>
+                                <option v-for="b in budgetRanges" :key="b" :value="b">{{ b }}</option>
+                            </select>
+                        </div>
+
+                        <fieldset class="lk-field lk-field--full lk-chips">
+                            <legend>What interests you?</legend>
+                            <label v-for="opt in interestOptions" :key="opt" class="lk-chip">
+                                <input type="checkbox" :value="opt" v-model="travel.interests" />
+                                <span>{{ opt }}</span>
+                            </label>
+                        </fieldset>
+
+                        <div class="lk-field lk-field--full">
+                            <label for="t-message">Tell us about your trip</label>
+                            <textarea id="t-message" v-model.trim="travel.message" rows="4" placeholder="Places you'd like to visit, special occasions, pace of travel…"></textarea>
+                        </div>
+
+                        <p v-if="errorMsg" class="lk-error lk-field--full">{{ errorMsg }}</p>
+
+                        <div class="lk-field--full lk-form__foot">
+                            <button type="submit" class="lk-nav-cta lk-nav-cta--block" :disabled="submitting">
+                                {{ submitting ? 'Sending…' : 'Send Travel Inquiry' }}
+                                <i class="material-icons">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </transition>
+        <!-- =============== /INQUIRY MODAL =============== -->
     </header>
 </template>
 
 <script>
+const todayISO = () => {
+    const d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+};
+
+const emptyQuick = () => ({
+    name: '',
+    email: '',
+    arrival: '',
+    departure: '',
+    persons: 2,
+    hotel: '',
+});
+
+const emptyTravel = () => ({
+    name: '',
+    email: '',
+    phone: '',
+    country: '',
+    arrival: '',
+    departure: '',
+    adults: 2,
+    children: 0,
+    hotel: '',
+    budget: '',
+    interests: [],
+    message: '',
+});
+
 export default {
     name: 'LankaNavBar',
 
     props: {
         /** Let the bar sit transparent over a hero image until the page scrolls. */
         overHero: { type: Boolean, default: false },
-        /** URL opened in the inquiry popup window. */
-        inquiryUrl: { type: String, default: '/inquiry' },
+        /** API endpoint that receives the inquiry (POST, JSON). */
+        inquiryEndpoint: { type: String, default: '/api/inquiry' },
     },
 
     data() {
@@ -193,6 +414,30 @@ export default {
             isMenuOpen: false,
             openMenu: -1,
             accordion: -1,
+
+            // ---- Inquiry modal state ----
+            inquiryOpen: false,
+            inquiryTab: 'quick', // 'quick' | 'travel'
+            submitting: false,
+            submitted: false,
+            submittedName: '',
+            errorMsg: '',
+            today: todayISO(),
+            quick: emptyQuick(),
+            travel: emptyTravel(),
+
+            hotelCategories: ['5 Star', '4 Star', '3 Star', 'Budget', 'Boutique (Luxury)'],
+            budgetRanges: ['Under $500', '$500 – $1,000', '$1,000 – $2,000', '$2,000 – $4,000', '$4,000+'],
+            interestOptions: [
+                'Culture & History',
+                'Beaches',
+                'Wildlife & Safari',
+                'Hill Country & Tea',
+                'Whale Watching',
+                'Food & Cooking',
+                'Adventure',
+                'Honeymoon',
+            ],
 
             // ---- EDIT THESE: contact details shown in the top strip & drawer ----
             phoneRaw: '+94 77 680 9002',
@@ -249,26 +494,83 @@ export default {
         closeMobileMenu() {
             this.isMenuOpen = false;
             this.accordion = -1;
-            document.body.style.overflow = '';
+            // keep the page locked if the inquiry modal is (about to be) open
+            document.body.style.overflow = this.inquiryOpen ? 'hidden' : '';
         },
         toggleAccordion(i) {
             this.accordion = this.accordion === i ? -1 : i;
         },
+
+        /* ---------- Inquiry modal ---------- */
+        // Name kept so the existing @click handlers keep working.
         openInquiryPopup() {
-            const w = 720;
-            const h = 800;
-            const left = Math.round((screen.width - w) / 2);
-            const top = Math.round((screen.height - h) / 2);
-            window.open(
-                this.inquiryUrl,
-                'LankaInquiry',
-                `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no`
-            );
+            this.submitted = false;
+            this.errorMsg = '';
+            this.today = todayISO();
+            this.inquiryOpen = true;
+            document.body.style.overflow = 'hidden';
         },
+        closeInquiry() {
+            this.inquiryOpen = false;
+            this.errorMsg = '';
+            if (!this.isMenuOpen) document.body.style.overflow = '';
+            if (this.submitted) {
+                // reset forms after a successful send
+                this.quick = emptyQuick();
+                this.travel = emptyTravel();
+                this.submitted = false;
+            }
+        },
+        switchTab(tab) {
+            this.inquiryTab = tab;
+            this.errorMsg = '';
+        },
+        validate(form) {
+            if (form.arrival && form.departure && form.departure < form.arrival) {
+                return 'Departure date must be on or after the arrival date.';
+            }
+            return '';
+        },
+        async submitInquiry() {
+            const isQuick = this.inquiryTab === 'quick';
+            const form = isQuick ? this.quick : this.travel;
+
+            const problem = this.validate(form);
+            if (problem) {
+                this.errorMsg = problem;
+                return;
+            }
+
+            this.errorMsg = '';
+            this.submitting = true;
+
+            try {
+                const res = await fetch(this.inquiryEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                    },
+                    body: JSON.stringify({ type: isQuick ? 'quick' : 'travel', ...form }),
+                });
+
+                if (!res.ok) throw new Error('Request failed');
+
+                this.submittedName = form.name;
+                this.submitted = true;
+                this.$emit('inquiry-sent', { type: isQuick ? 'quick' : 'travel', ...form });
+            } catch (e) {
+                this.errorMsg = 'Sorry, something went wrong. Please try again or email us directly.';
+            } finally {
+                this.submitting = false;
+            }
+        },
+
         onKeydown(e) {
             if (e.key === 'Escape') {
                 this.openMenu = -1;
-                if (this.isMenuOpen) this.closeMobileMenu();
+                if (this.inquiryOpen) this.closeInquiry();
+                else if (this.isMenuOpen) this.closeMobileMenu();
             }
         },
         onDocClick(e) {
@@ -542,18 +844,21 @@ a.lk-topbar__item:hover { color: var(--gold); }
     gap: 8px;
     margin-left: 6px;
     padding: 12px 22px;
+    border: 0;
     border-radius: 999px;
     background: linear-gradient(135deg, #ffc857 0%, var(--gold) 55%, var(--gold-deep) 100%);
     color: var(--ocean-900);
     font: 800 .92rem 'Manrope', sans-serif;
     text-decoration: none;
     white-space: nowrap;
+    cursor: pointer;
     box-shadow: 0 6px 16px rgba(217, 149, 18, .35);
     transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 .lk-nav-cta .material-icons { font-size: 18px; transition: transform .25s ease; }
 .lk-nav-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(217, 149, 18, .45); filter: brightness(1.04); }
 .lk-nav-cta:hover .material-icons { transform: translate(3px, -3px); }
+.lk-nav-cta:disabled { opacity: .65; cursor: not-allowed; transform: none; }
 .lk-nav-cta--block { width: 100%; margin: 0; }
 
 /* Focus */
@@ -688,6 +993,169 @@ a.lk-topbar__item:hover { color: var(--gold); }
     pointer-events: none;
 }
 
+/* ---------- Inquiry modal (NEW) ---------- */
+.lk-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(7, 42, 82, .6);
+    backdrop-filter: blur(5px);
+}
+.lk-modal__panel {
+    width: 100%;
+    max-width: 680px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 22px;
+    border-top: 4px solid var(--gold);
+    box-shadow: 0 30px 70px rgba(7, 42, 82, .4);
+    padding: 24px 26px 26px;
+    color: var(--ink);
+}
+.lk-modal__head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+.lk-modal__title {
+    margin: 0;
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.5rem;
+    color: var(--ocean-900);
+}
+.lk-modal__sub { margin: 4px 0 0; font-size: .85rem; color: var(--muted); }
+.lk-modal__close {
+    display: grid;
+    place-items: center;
+    width: 40px; height: 40px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--foam);
+    color: var(--ocean-900);
+    cursor: pointer;
+    transition: background-color .2s ease;
+}
+.lk-modal__close:hover { background: var(--gold); }
+
+/* Tabs */
+.lk-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 5px;
+    margin-bottom: 20px;
+    background: var(--foam);
+    border-radius: 14px;
+}
+.lk-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 10px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    font: 700 .92rem 'Manrope', sans-serif;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, box-shadow .2s ease;
+}
+.lk-tab:hover { color: var(--ocean-700); }
+.lk-tab.is-active {
+    background: #fff;
+    color: var(--ocean-900);
+    box-shadow: 0 4px 12px rgba(7, 42, 82, .12);
+}
+.lk-tab.is-active .material-icons { color: var(--gold-deep); }
+
+/* Form */
+.lk-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+}
+.lk-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; border: 0; padding: 0; margin: 0; }
+.lk-field--full { grid-column: 1 / -1; }
+.lk-field label,
+.lk-field legend {
+    font-size: .8rem;
+    font-weight: 700;
+    color: var(--ocean-900);
+    padding: 0;
+}
+.lk-field input,
+.lk-field select,
+.lk-field textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1.5px solid #cfe0f3;
+    border-radius: 12px;
+    background: #fff;
+    font: 500 .95rem 'Manrope', sans-serif;
+    color: var(--ink);
+    transition: border-color .2s ease, box-shadow .2s ease;
+}
+.lk-field textarea { resize: vertical; min-height: 96px; }
+.lk-field input:focus,
+.lk-field select:focus,
+.lk-field textarea:focus {
+    outline: none;
+    border-color: var(--ocean-500);
+    box-shadow: 0 0 0 3px rgba(20, 117, 225, .18);
+}
+.lk-field input::placeholder,
+.lk-field textarea::placeholder { color: #93a6c0; }
+
+/* Interest chips */
+.lk-chips { display: flex; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+.lk-chips legend { width: 100%; margin-bottom: 8px; }
+.lk-chip { position: relative; cursor: pointer; }
+.lk-chip input { position: absolute; opacity: 0; pointer-events: none; }
+.lk-chip span {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1.5px solid #cfe0f3;
+    border-radius: 999px;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--ocean-700);
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+}
+.lk-chip:hover span { border-color: var(--ocean-500); }
+.lk-chip input:checked + span {
+    background: var(--ocean-700);
+    border-color: var(--ocean-700);
+    color: #fff;
+}
+.lk-chip input:focus-visible + span { outline: 3px solid var(--lagoon); outline-offset: 2px; }
+
+.lk-error {
+    margin: 0;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: #fdecec;
+    color: #b42318;
+    font-size: .85rem;
+    font-weight: 600;
+}
+.lk-form__foot { margin-top: 4px; }
+
+/* Success */
+.lk-success { text-align: center; padding: 26px 10px 8px; }
+.lk-success .material-icons { font-size: 64px !important; color: #22a06b; }
+.lk-success h3 { margin: 10px 0 6px; font-family: 'Fraunces', Georgia, serif; font-size: 1.4rem; color: var(--ocean-900); }
+.lk-success p { margin: 0 0 20px; color: var(--muted); }
+.lk-success .lk-nav-cta { margin: 0 auto; min-width: 160px; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1180px) {
     .lk-ghost span { display: none; }
@@ -704,6 +1172,9 @@ a.lk-topbar__item:hover { color: var(--gold); }
 }
 @media (max-width: 560px) {
     .lk-topbar__item:nth-child(2) { display: none; }
+    .lk-form { grid-template-columns: 1fr; }
+    .lk-modal__panel { padding: 20px 16px 22px; border-radius: 18px; }
+    .lk-tab { font-size: .82rem; gap: 5px; padding: 10px 6px; }
 }
 @media (max-width: 420px) {
     .lk-brand__tag { display: none; }
