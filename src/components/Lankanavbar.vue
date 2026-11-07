@@ -298,7 +298,10 @@
 
                         <div class="lk-field">
                             <label for="t-country">Country</label>
-                            <input id="t-country" v-model.trim="travel.country" type="text" placeholder="Where are you from?" />
+                            <select id="t-country" v-model="travel.country">
+                                <option value="">Select country</option>
+                                <option v-for="c in countries" :key="c" :value="c">{{ c }}</option>
+                            </select>
                         </div>
 
                         <div class="lk-field">
@@ -309,6 +312,11 @@
                         <div class="lk-field">
                             <label for="t-departure">Departure Date</label>
                             <input id="t-departure" v-model="travel.departure" type="date" :min="travel.arrival || today" required />
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-rooms">Number of Rooms</label>
+                            <input id="t-rooms" v-model.number="travel.rooms" type="number" min="1" max="25" required />
                         </div>
 
                         <div class="lk-field">
@@ -326,6 +334,14 @@
                             <select id="t-hotel" v-model="travel.hotel" required>
                                 <option value="" disabled>Select category</option>
                                 <option v-for="h in hotelCategories" :key="h" :value="h">{{ h }}</option>
+                            </select>
+                        </div>
+
+                        <div class="lk-field">
+                            <label for="t-meal">Meal Plan</label>
+                            <select id="t-meal" v-model="travel.mealPlan" required>
+                                <option value="" disabled>Select meal plan</option>
+                                <option v-for="m in mealPlans" :key="m" :value="m">{{ m }}</option>
                             </select>
                         </div>
 
@@ -367,6 +383,54 @@
 </template>
 
 <script>
+import emailjs from '@emailjs/browser';
+
+// Public key + service/template IDs are safe in browser code.
+// NEVER put the EmailJS private key here.
+const EMAILJS = {
+    publicKey: 'UoAQPbgdpIPj5eGN6',
+    serviceId: 'service_of2u8m9',
+    quickTemplateId: 'template_f5wmp8j',
+    travelTemplateId: 'template_xxkq1e7',
+};
+
+const COUNTRIES = [
+    'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda',
+    'Argentina', 'Armenia', 'Australia', 'Austria', 'Azerbaijan', 'Bahamas',
+    'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium', 'Belize',
+    'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil',
+    'Brunei', 'Bulgaria', 'Burkina Faso', 'Burundi', 'Cambodia', 'Cameroon',
+    'Canada', 'Cape Verde', 'Central African Republic', 'Chad', 'Chile', 'China',
+    'Colombia', 'Comoros', 'Congo (DRC)', 'Congo (Republic)', 'Costa Rica', 'Croatia',
+    'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica',
+    'Dominican Republic', 'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea',
+    'Estonia', 'Eswatini', 'Ethiopia', 'Fiji', 'Finland', 'France',
+    'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece',
+    'Grenada', 'Guatemala', 'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti',
+    'Honduras', 'Hong Kong', 'Hungary', 'Iceland', 'India', 'Indonesia',
+    'Iran', 'Iraq', 'Ireland', 'Israel', 'Italy', 'Ivory Coast',
+    'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati',
+    'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho',
+    'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg', 'Macau',
+    'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta',
+    'Marshall Islands', 'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova',
+    'Monaco', 'Mongolia', 'Montenegro', 'Morocco', 'Mozambique', 'Myanmar',
+    'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua',
+    'Niger', 'Nigeria', 'North Korea', 'North Macedonia', 'Norway', 'Oman',
+    'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea', 'Paraguay',
+    'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania',
+    'Russia', 'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa',
+    'San Marino', 'Sao Tome and Principe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles',
+    'Sierra Leone', 'Singapore', 'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia',
+    'South Africa', 'South Korea', 'South Sudan', 'Spain', 'Sri Lanka', 'Sudan',
+    'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan',
+    'Tanzania', 'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago',
+    'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine',
+    'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu',
+    'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe',
+    'Other',
+];
+
 const todayISO = () => {
     const d = new Date();
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -389,9 +453,11 @@ const emptyTravel = () => ({
     country: '',
     arrival: '',
     departure: '',
+    rooms: 1,
     adults: 2,
     children: 0,
     hotel: '',
+    mealPlan: '',
     budget: '',
     interests: [],
     message: '',
@@ -403,7 +469,7 @@ export default {
     props: {
         /** Let the bar sit transparent over a hero image until the page scrolls. */
         overHero: { type: Boolean, default: false },
-        /** API endpoint that receives the inquiry (POST, JSON). */
+        /** API endpoint that receives the inquiry (POST, JSON). No longer used (EmailJS sends the mail). */
         inquiryEndpoint: { type: String, default: '/api/inquiry' },
     },
 
@@ -427,16 +493,17 @@ export default {
             travel: emptyTravel(),
 
             hotelCategories: ['5 Star', '4 Star', '3 Star', 'Budget', 'Boutique (Luxury)'],
-            budgetRanges: ['Under $500', '$500 – $1,000', '$1,000 – $2,000', '$2,000 – $4,000', '$4,000+'],
+            countries: COUNTRIES,
+            mealPlans: ['Bed & Breakfast', 'Half Board', 'Full Board'],
+            budgetRanges: ['$1 - $500', '$500 - $1000', '$1000 - $2000', '$2000 - $3500', '$3500 - $6000', '$6000+'],
             interestOptions: [
-                'Culture & History',
-                'Beaches',
-                'Wildlife & Safari',
-                'Hill Country & Tea',
-                'Whale Watching',
-                'Food & Cooking',
+                'Culture & Heritage',
+                'Nature',
+                'Ancient & Archaeology',
+                'Wildlife',
                 'Adventure',
-                'Honeymoon',
+                'Beach',
+                'Shopping',
             ],
 
             // ---- EDIT THESE: contact details shown in the top strip & drawer ----
@@ -545,16 +612,38 @@ export default {
             this.submitting = true;
 
             try {
-                const res = await fetch(this.inquiryEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Accept: 'application/json',
-                    },
-                    body: JSON.stringify({ type: isQuick ? 'quick' : 'travel', ...form }),
-                });
+                const params = isQuick
+                    ? {
+                          from_name: form.name,
+                          reply_to: form.email,
+                          arrival: form.arrival,
+                          departure: form.departure,
+                          persons: form.persons,
+                          hotel: form.hotel,
+                      }
+                    : {
+                          from_name: form.name,
+                          reply_to: form.email,
+                          phone: form.phone || '—',
+                          country: form.country || '—',
+                          arrival: form.arrival,
+                          departure: form.departure,
+                          rooms: form.rooms,
+                          adults: form.adults,
+                          children: form.children || 0,
+                          hotel: form.hotel,
+                          meal_plan: form.mealPlan,
+                          budget: form.budget || 'Not specified',
+                          interests: form.interests.length ? form.interests.join(', ') : '—',
+                          message: form.message || '—',
+                      };
 
-                if (!res.ok) throw new Error('Request failed');
+                await emailjs.send(
+                    EMAILJS.serviceId,
+                    isQuick ? EMAILJS.quickTemplateId : EMAILJS.travelTemplateId,
+                    params,
+                    { publicKey: EMAILJS.publicKey }
+                );
 
                 this.submittedName = form.name;
                 this.submitted = true;
