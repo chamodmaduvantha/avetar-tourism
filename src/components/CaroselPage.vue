@@ -90,7 +90,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Young+Serif&display=swap" rel="stylesheet">
 
   Images live in:  src/assets/carousel/
-    Seegiriya.png, Ninearch.jpg, Gallefort.jpg, Mirissa.jpg, Beach.jpg, Ambuluwawa.jpg
+    Seegiriya.png, Kandy.jpg, Ninearch.jpg, Yala.jpg, Gallefort.jpg, Beach1.jpg, Ambuluwawa.jpg
 */
 export default {
   name: 'TourismCarousel',
@@ -115,6 +115,18 @@ export default {
           link: '#sigiriya'
         },
         {
+          src: require('@/assets/carousel/Kandy.jpg'),
+          alt: 'Temple of the Sacred Tooth Relic beside Kandy Lake',
+          pos: 'center',
+          tab: 'Kandy',
+          region: 'Sacred city',
+          title: 'Visit the Temple of the Sacred Tooth Relic',
+          subtitle: 'The golden-roofed temple in Kandy that houses a relic of the Buddha, set beside the lake and wrapped in daily ritual and drumming.',
+          highlights: ['Temple of the Tooth', 'Evening puja ceremony', 'Kandy Lake walks'],
+          cta: 'Plan a Kandy visit',
+          link: '#kandy'
+        },
+        {
           src: require('@/assets/carousel/Ninearch.jpg'),
           alt: 'Blue train crossing the Nine Arch Bridge in Ella',
           pos: 'center',
@@ -127,7 +139,19 @@ export default {
           link: '#ella'
         },
         {
-          src: require('@/assets/carousel/Gallefort.jpg'),
+          src: require('@/assets/carousel/Yala.jpg'),
+          alt: 'Leopard resting in Yala National Park',
+          pos: 'center',
+          tab: 'Yala',
+          region: 'Wildlife safari',
+          title: 'Go on safari in Yala National Park',
+          subtitle: 'Jeep safaris through scrub, lagoons and rock outcrops, home to one of the densest leopard populations in the world, plus elephants and sloth bears.',
+          highlights: ['Leopard spotting', 'Half & full-day safaris', 'Elephants & birdlife'],
+          cta: 'Plan a safari',
+          link: '#yala'
+        },
+        {
+          src: require('@/assets/carousel/Galle-Fort.png'),
           alt: 'Galle Fort lighthouse at sunset beside the sea',
           pos: 'center 40%',
           tab: 'Galle Fort',
@@ -139,7 +163,7 @@ export default {
           link: '#galle'
         },
         {
-          src: require('@/assets/carousel/Mirissa.jpg'),
+          src: require('@/assets/carousel/Beach1.jpg'),
           alt: 'Mirissa beach with palm trees and clear shallow water',
           pos: 'center 55%',
           tab: 'Mirissa',
@@ -149,18 +173,6 @@ export default {
           highlights: ['Whale watching', 'Surf & snorkel', 'Beachfront stays'],
           cta: 'Plan a beach escape',
           link: '#mirissa'
-        },
-        {
-          src: require('@/assets/carousel/Beach.jpg'),
-          alt: 'Crystal-clear turquoise water around rocky boulders',
-          pos: 'center',
-          tab: 'Hidden coves',
-          region: 'Secluded shores',
-          title: 'Find the water nobody else has found',
-          subtitle: 'Clear shallows, sun-warmed boulders and quiet coves for a long, unhurried swim.',
-          highlights: ['Snorkelling', 'Private boat trips', 'Quiet beach days'],
-          cta: 'Plan a quiet escape',
-          link: '#coves'
         },
         {
           src: require('@/assets/carousel/Ambuluwawa.jpg'),
