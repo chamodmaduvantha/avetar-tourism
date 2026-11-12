@@ -173,7 +173,7 @@
             </svg>
         </aside>
 
-        <!-- ================= INQUIRY MODAL (NEW) ================= -->
+        <!-- ================= INQUIRY MODAL ================= -->
         <transition name="lk-fade">
             <div
                 v-if="inquiryOpen"
@@ -519,11 +519,17 @@ export default {
                 {
                     text: 'Destinations',
                     link: '/destinations',
+                    // Same seven destinations (and order) as the home page "Destinations" section.
+                    // Change the `link` values if your destination pages use different URLs.
                     children: [
-                        { text: 'Sigiriya & Cultural Triangle', desc: 'Rock fortress, ancient cities', icon: 'temple_buddhist', link: '/destinations/sigiriya' },
-                        { text: 'Kandy & Hill Country', desc: 'Tea estates and misty trains', icon: 'terrain', link: '/destinations/hill-country' },
-                        { text: 'Southern Coast', desc: 'Galle Fort, Mirissa, Unawatuna', icon: 'beach_access', link: '/destinations/south-coast' },
-                        { text: 'Yala & Wildlife', desc: 'Leopards, elephants, safaris', icon: 'pets', link: '/destinations/wildlife' },
+                        { text: 'Sigiriya', desc: 'Climb the ancient rock fortress', icon: 'temple_buddhist', link: '/destinations/sigiriya' },
+                        { text: 'Ella', desc: 'Train rides, tea hills, Nine Arch Bridge', icon: 'train', link: '/destinations/ella' },
+                        { text: 'Kandy', desc: 'Temple of the Tooth and misty hills', icon: 'account_balance', link: '/destinations/kandy' },
+                        { text: 'Galle', desc: 'Dutch fort ramparts at sunset', icon: 'location_city', link: '/destinations/galle' },
+                        { text: 'Yala', desc: 'Leopard country safaris', icon: 'pets', link: '/destinations/yala' },
+                        { text: 'Mirissa', desc: 'Whale watching, surf and beaches', icon: 'beach_access', link: '/destinations/mirissa' },
+                        { text: 'Nuwara Eliya', desc: 'Tea country and colonial charm', icon: 'terrain', link: '/destinations/nuwara-eliya' },
+                        { text: 'All destinations', desc: 'See every place we cover', icon: 'explore', link: '/destinations' },
                     ],
                 },
                 {
@@ -1043,7 +1049,8 @@ a.lk-topbar__item:hover { color: var(--gold); }
 .lk-drawer__link .is-flipped { transform: rotate(180deg); }
 
 .lk-drawer__sub { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
-.lk-drawer__sub.is-open { max-height: 320px; }
+/* raised from 320px so all 8 Destinations rows fit */
+.lk-drawer__sub.is-open { max-height: 480px; }
 .lk-drawer__sub a {
     display: flex; align-items: center; gap: 12px;
     padding: 12px 8px 12px 14px;
@@ -1082,7 +1089,7 @@ a.lk-topbar__item:hover { color: var(--gold); }
     pointer-events: none;
 }
 
-/* ---------- Inquiry modal (NEW) ---------- */
+/* ---------- Inquiry modal ---------- */
 .lk-modal {
     position: fixed;
     inset: 0;

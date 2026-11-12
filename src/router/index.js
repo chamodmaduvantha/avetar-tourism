@@ -29,6 +29,19 @@ const KalutaraBranch    = () => import(/* webpackChunkName: "branches" */ '../co
 const MatugamaBranch    = () => import(/* webpackChunkName: "branches" */ '../components/branches/MatugamaBranch.vue')
 const BeliattaBranch    = () => import(/* webpackChunkName: "branches" */ '../components/branches/BeliattaBranch.vue')
 
+// ── Plan My Trip (NEW) ────────────────────────────────────────────────────
+const PlanYourTripPage = () => import(/* webpackChunkName: "pages" */ '../components/Planyourtrippage.vue')
+
+// ── Destinations (NEW) ────────────────────────────────────────────────────
+const DestinationsPage  = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/DestinationsPage.vue')
+const SigiriyaPage      = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/SigiriyaPage.vue')
+const EllaPage          = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/EllaPage.vue')
+const KandyPage         = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/KandyPage.vue')
+const GallePage         = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/GallePage.vue')
+const YalaPage          = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/YalaPage.vue')
+const MirissaPage       = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/MirissaPage.vue')
+const NuwaraEliyaPage   = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/NuwaraEliyaPage.vue')
+
 // ─────────────────────────────────────────────────────────────────────────
 const BASE_URL = ''
 
@@ -105,6 +118,82 @@ const routes = [
       title: 'Privacy Policy | CCBE',
       description: 'Read the Cambridge College of British English Privacy Policy — how we collect, use, and protect your personal information.',
       canonical: `${BASE_URL}/privacy-policy`
+    }
+  },
+
+  // ── Plan My Trip (NEW) ──────────────────────────────────────────────────
+  {
+    path: '/plan-your-trip', name: 'PlanYourTripPage', component: PlanYourTripPage,
+    meta: {
+      title: 'Plan My Trip | Ceylon Escapes',
+      description: 'Plan your Sri Lanka trip with Ceylon Escapes. Send a travel inquiry with your dates, group size and interests and our team will reply with a tailored plan, free of charge.',
+      canonical: `${BASE_URL}/plan-your-trip`
+    }
+  },
+
+  // ── Destinations (NEW) ──────────────────────────────────────────────────
+  {
+    path: '/destinations', name: 'DestinationsPage', component: DestinationsPage,
+    meta: {
+      title: 'Destinations | Ceylon Escapes',
+      description: 'Explore our favourite places in Sri Lanka — Sigiriya, Ella, Kandy, Galle, Yala, Mirissa and Nuwara Eliya. Highlights, best time to go and sample days for each.',
+      canonical: `${BASE_URL}/destinations`
+    }
+  },
+  {
+    path: '/destinations/sigiriya', name: 'SigiriyaPage', component: SigiriyaPage,
+    meta: {
+      title: 'Sigiriya | Ceylon Escapes',
+      description: 'Climb the ancient rock fortress of Sigiriya at sunrise. Highlights, best time to visit, a sample day and travel tips for the Cultural Triangle.',
+      canonical: `${BASE_URL}/destinations/sigiriya`
+    }
+  },
+  {
+    path: '/destinations/ella', name: 'EllaPage', component: EllaPage,
+    meta: {
+      title: 'Ella | Ceylon Escapes',
+      description: 'Scenic train rides, tea hills and the Nine Arch Bridge. Discover Ella in Sri Lanka\'s hill country with highlights, best time to go and travel tips.',
+      canonical: `${BASE_URL}/destinations/ella`
+    }
+  },
+  {
+    path: '/destinations/kandy', name: 'KandyPage', component: KandyPage,
+    meta: {
+      title: 'Kandy | Ceylon Escapes',
+      description: 'Visit the Temple of the Tooth, Kandy Lake and the Royal Botanic Gardens. Highlights, best time to visit and a sample day in the hill capital.',
+      canonical: `${BASE_URL}/destinations/kandy`
+    }
+  },
+  {
+    path: '/destinations/galle', name: 'GallePage', component: GallePage,
+    meta: {
+      title: 'Galle | Ceylon Escapes',
+      description: 'Walk the ramparts of the Dutch fort at sunset. Explore Galle Fort, nearby beaches and heritage on Sri Lanka\'s south coast.',
+      canonical: `${BASE_URL}/destinations/galle`
+    }
+  },
+  {
+    path: '/destinations/yala', name: 'YalaPage', component: YalaPage,
+    meta: {
+      title: 'Yala | Ceylon Escapes',
+      description: 'Early-morning safaris in leopard country. Plan a Yala National Park visit with highlights, the best season and wildlife tips.',
+      canonical: `${BASE_URL}/destinations/yala`
+    }
+  },
+  {
+    path: '/destinations/mirissa', name: 'MirissaPage', component: MirissaPage,
+    meta: {
+      title: 'Mirissa | Ceylon Escapes',
+      description: 'Whale watching, surf and palm-lined beaches in Mirissa. Highlights, best time to go and travel tips for Sri Lanka\'s south coast.',
+      canonical: `${BASE_URL}/destinations/mirissa`
+    }
+  },
+  {
+    path: '/destinations/nuwara-eliya', name: 'NuwaraEliyaPage', component: NuwaraEliyaPage,
+    meta: {
+      title: 'Nuwara Eliya | Ceylon Escapes',
+      description: 'Cool air, colonial charm and rolling tea estates. Explore Nuwara Eliya with highlights, best time to visit and a sample day.',
+      canonical: `${BASE_URL}/destinations/nuwara-eliya`
     }
   },
 
