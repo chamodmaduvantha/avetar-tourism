@@ -229,6 +229,7 @@
                     <!-- Quick Inquiry form -->
                     <form
                         v-else-if="inquiryTab === 'quick'"
+                        novalidate
                         class="lk-form"
                         @submit.prevent="submitInquiry"
                     >
@@ -239,7 +240,8 @@
 
                         <div class="lk-field lk-field--full">
                             <label for="q-email">Email</label>
-                            <input id="q-email" v-model.trim="quick.email" type="email" required placeholder="you@example.com" />
+                            <input id="q-email" v-model.trim="quick.email" :class="{ 'is-invalid': quickEmailError }" type="text" inputmode="email" autocomplete="email" required placeholder="you@example.com" />
+                            <p v-if="quickEmailError" class="lk-hint-error" role="alert">{{ quickEmailError }}</p>
                         </div>
 
                         <div class="lk-field">
@@ -278,6 +280,7 @@
                     <!-- Travel Inquiry form -->
                     <form
                         v-else
+                        novalidate
                         class="lk-form"
                         @submit.prevent="submitInquiry"
                     >
@@ -288,7 +291,8 @@
 
                         <div class="lk-field">
                             <label for="t-email">Email</label>
-                            <input id="t-email" v-model.trim="travel.email" type="email" required placeholder="you@example.com" />
+                            <input id="t-email" v-model.trim="travel.email" :class="{ 'is-invalid': travelEmailError }" type="text" inputmode="email" autocomplete="email" required placeholder="you@example.com" />
+                            <p v-if="travelEmailError" class="lk-hint-error" role="alert">{{ travelEmailError }}</p>
                         </div>
 
                         <div class="lk-field">
@@ -330,19 +334,23 @@
                         </div>
 
                         <div class="lk-field">
-                            <label for="t-hotel">Hotel Category</label>
-                            <select id="t-hotel" v-model="travel.hotel" required>
-                                <option value="" disabled>Select category</option>
-                                <option v-for="h in hotelCategories" :key="h" :value="h">{{ h }}</option>
-                            </select>
+                            <label id="t-hotel-label">Hotel Category (select one or more)</label>
+                            <div class="lk-chips" role="group" aria-labelledby="t-hotel-label">
+                                <label v-for="h in hotelCategories" :key="h" class="lk-chip">
+                                    <input type="checkbox" :value="h" v-model="travel.hotel" />
+                                    <span>{{ h }}</span>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="lk-field">
-                            <label for="t-meal">Meal Plan</label>
-                            <select id="t-meal" v-model="travel.mealPlan" required>
-                                <option value="" disabled>Select meal plan</option>
-                                <option v-for="m in mealPlans" :key="m" :value="m">{{ m }}</option>
-                            </select>
+                            <label id="t-meal-label">Meal Plan (select one or more)</label>
+                            <div class="lk-chips" role="group" aria-labelledby="t-meal-label">
+                                <label v-for="m in mealPlans" :key="m" class="lk-chip">
+                                    <input type="checkbox" :value="m" v-model="travel.mealPlan" />
+                                    <span>{{ m }}</span>
+                                </label>
+                            </div>
                         </div>
 
                         <div class="lk-field">
@@ -431,6 +439,9 @@ const COUNTRIES = [
     'Other',
 ];
 
+// Must have text, one @, a domain and a dot ending, e.g. name@example.com
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 const todayISO = () => {
     const d = new Date();
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -456,8 +467,8 @@ const emptyTravel = () => ({
     rooms: 1,
     adults: 2,
     children: 0,
-    hotel: '',
-    mealPlan: '',
+    hotel: [],
+    mealPlan: [],
     budget: '',
     interests: [],
     message: '',
@@ -548,7 +559,20 @@ export default {
         };
     },
 
+    computed: {
+        quickEmailError() {
+            return this.emailMessage(this.quick.email);
+        },
+        travelEmailError() {
+            return this.emailMessage(this.travel.email);
+        },
+    },
+
     methods: {
+        emailMessage(value) {
+            if (!value) return '';
+            return EMAIL_REGEX.test(value) ? '' : 'Enter a valid email, for example name@example.com';
+        },
         isActive(link) {
             return link === '/'
                 ? window.location.pathname === '/'
@@ -599,6 +623,24 @@ export default {
             this.errorMsg = '';
         },
         validate(form) {
+            if (!form.name) {
+                return 'Please enter your name.';
+            }
+            if (!EMAIL_REGEX.test(form.email || '')) {
+                return 'Please enter a valid email address, for example name@example.com.';
+            }
+            if (!form.arrival || !form.departure) {
+                return 'Please choose your arrival and departure dates.';
+            }
+            if (!form.hotel || !form.hotel.length) {
+                return 'Please select a hotel category.';
+            }
+            if ('mealPlan' in form && !form.mealPlan.length) {
+                return 'Please select a meal plan.';
+            }
+            if (!(form.persons ?? form.adults) || (form.persons ?? form.adults) < 1) {
+                return 'Please enter at least 1 person.';
+            }
             if (form.arrival && form.departure && form.departure < form.arrival) {
                 return 'Departure date must be on or after the arrival date.';
             }
@@ -637,8 +679,8 @@ export default {
                           rooms: form.rooms,
                           adults: form.adults,
                           children: form.children || 0,
-                          hotel: form.hotel,
-                          meal_plan: form.mealPlan,
+                          hotel: [].concat(form.hotel).join(', '),
+                          meal_plan: [].concat(form.mealPlan).join(', '),
                           budget: form.budget || 'Not specified',
                           interests: form.interests.length ? form.interests.join(', ') : '—',
                           message: form.message || '—',
@@ -1244,6 +1286,17 @@ a.lk-topbar__item:hover { color: var(--gold); }
     font-weight: 600;
 }
 .lk-form__foot { margin-top: 4px; }
+
+.lk-field input.is-invalid {
+    border-color: #b42318;
+    box-shadow: 0 0 0 3px rgba(180, 35, 24, .12);
+}
+.lk-hint-error {
+    margin: 0;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #b42318;
+}
 
 /* Success */
 .lk-success { text-align: center; padding: 26px 10px 8px; }

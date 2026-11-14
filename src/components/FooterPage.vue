@@ -11,6 +11,9 @@
             <div class="footer-content">
                 <!-- Brand row -->
                 <div class="brand-row">
+                    <div class="brand-logo">
+                        <img :src="logo" :alt="`${brandName} Logo`" />
+                    </div>
                     <div class="brand-block">
                         <strong class="title-footer">{{ tagline }}</strong>
                         <p class="brand-blurb">
@@ -77,12 +80,9 @@
                     </div>
                 </div>
 
-                <!-- Logos: your brand + optional partner / accreditation logos -->
-                <div class="logos-container">
+                <!-- Partner / accreditation logos (only shown when partners are added) -->
+                <div class="logos-container" v-if="partners.length">
                     <div class="logos-grid">
-                        <div class="logo-item">
-                            <img :src="logo" :alt="`${brandName} Logo`" width="200" height="150" />
-                        </div>
                         <div class="logo-item" v-for="partner in partners" :key="partner.name">
                             <img :src="partner.src" class="responsive-logo" :alt="partner.name" width="200" height="150" />
                         </div>
@@ -99,7 +99,6 @@
                         confidence and travel responsibly.
                         <br />Copyright © {{ currentYear }} {{ brandName }}. All rights reserved.
                     </div>
-                    <button class="to-top" @click="scrollToTop" aria-label="Back to top" title="Back to top">&#8593;</button>
                 </div>
             </div>
         </footer>
@@ -321,7 +320,7 @@ export default {
             phoneRaw: '+94 77 680 9002',
             phoneDisplay: '+94 77 680 9002',
             email: 'lankaroundtrip@gmail.com',
-            address: 'No. 350/2, Ambalan Mountain, Kapuhenpola, Galle, Sri Lanka',
+            address: 'No 350/2, Ambalama Mountain, Kapuhempala, Galle, Sri lanka',
             openHours: 'Mon – Sat, 8:30 am – 6:00 pm',
             governingLaw: 'Sri Lanka',
             currentYear: new Date().getFullYear(),
@@ -460,7 +459,24 @@ export default {
 }
 
 .brand-block {
+    flex: 1;
+    min-width: 260px;
     max-width: 560px;
+}
+
+.brand-logo {
+    flex: 0 0 auto;
+    background: #ffffff;
+    padding: 14px 22px;
+    border-radius: 14px;
+    border-top: 4px solid var(--gold);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.brand-logo img {
+    display: block;
+    width: 150px;
+    height: auto;
 }
 
 .title-footer {
@@ -639,7 +655,9 @@ export default {
 .bottom-bar {
     position: relative;
     text-align: center;
-    padding-top: 10px;
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(142, 201, 255, 0.2);
 }
 
 .policy-links {

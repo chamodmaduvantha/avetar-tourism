@@ -416,6 +416,12 @@
         <div class="lk-cta-actions">
           <a href="#contact-form" class="lk-btn lk-btn-sun">Plan my trip</a>
           <a :href="`tel:${phoneRaw}`" class="lk-btn lk-btn-line">Call {{ phoneDisplay }}</a>
+          <a
+            :href="whatsappLink"
+            class="lk-btn lk-btn-whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >WhatsApp us</a>
         </div>
       </div>
     </section>
@@ -469,8 +475,11 @@ export default {
     return {
       // ---- EDIT: brand details (keep in sync with the footer) ----
       brandName: "Your Tourism Brand",
-      phoneRaw: "+94000000000",
-      phoneDisplay: "+94 00 000 0000",
+      phoneRaw: "+94776809002",
+      phoneDisplay: "+94 77 680 9002",
+      // WhatsApp needs the number in international format with no + and no spaces
+      whatsappNumber: "94776809002",
+      whatsappMessage: "Hello Avatar Tours, I would like to plan a trip to Sri Lanka.",
       // -------------------------------------------------------------
 
       ctaBg: imgBeach,
@@ -784,6 +793,10 @@ export default {
     };
   },
   computed: {
+    whatsappLink() {
+      return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(this.whatsappMessage)}`;
+    },
+
     // The list is doubled so the loop is seamless (track slides exactly -50%)
     marqueeLeft() {
       return [...this.gallery, ...this.gallery];
@@ -1855,6 +1868,14 @@ export default {
 .lk-btn-line:hover {
   border-color: #fff;
   background: rgba(255, 255, 255, 0.12);
+}
+.lk-btn-whatsapp {
+  background: #128c7e;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(18, 140, 126, 0.35);
+}
+.lk-btn-whatsapp:hover {
+  background: #0e7266;
 }
 .lk-btn:focus-visible,
 .lk-dest:focus-visible {
