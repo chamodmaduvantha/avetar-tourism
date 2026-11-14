@@ -358,14 +358,14 @@ export default {
                     icon: require('@/assets/social media icon/facebook.png')
                 },
                 {
-                    name: 'youtube',
-                    link: 'https://www.youtube.com/',
-                    icon: require('@/assets/social media icon/youtube.png')
+                    name: 'whatsapp',
+                    link: 'https://wa.me/94776809002',
+                    icon: require('@/assets/socialmediaicon/whatsapp.png')
                 },
                 {
-                    name: 'tiktok',
-                    link: 'https://www.tiktok.com/',
-                    icon: require('@/assets/social media icon/tiktok.png')
+                    name: 'telegram',
+                    link: 'https://t.me/Kavee9902',
+                    icon: require('@/assets/socialmediaicon/telegram.png')
                 },
             ],
             showPrivacyPolicy: false,
