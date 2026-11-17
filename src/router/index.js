@@ -31,6 +31,7 @@ const BeliattaBranch    = () => import(/* webpackChunkName: "branches" */ '../co
 
 // ── Plan My Trip (NEW) ────────────────────────────────────────────────────
 const PlanYourTripPage = () => import(/* webpackChunkName: "pages" */ '../components/Planyourtrippage.vue')
+const ToursPage = () => import(/* webpackChunkName: "pages" */ '../components/ToursPage.vue')
 
 // ── Destinations (NEW) ────────────────────────────────────────────────────
 const DestinationsPage  = () => import(/* webpackChunkName: "destinations" */ '../components/destinations/DestinationsPage.vue')
@@ -51,16 +52,16 @@ const routes = [
   {
     path: '/', name: 'HomePage', component: HomePage,
     meta: {
-      title: 'Home | Avatar Tours',
-      description: 'Cambridge College of British English (CCBE) — Sri Lanka\'s premier Cambridge English exam preparation centre. English courses for all ages across 8 branches island-wide.',
+      title: 'Home | Ceylon Escapes',
+      description: 'Plan your Sri Lanka trip with Ceylon Escapes. Local guides, comfortable stays and routes that avoid the crowds, from ancient cities to hill country and the south coast.',
       canonical: `${BASE_URL}/`
     }
   },
   {
     path: '/about', name: 'AboutUs', component: AboutUs,
     meta: {
-      title: 'About Us | CCBE',
-      description: 'Learn about CCBE — established in 2015 as a designated Cambridge Qualifications registration centre for the British Council in Sri Lanka. Our vision, mission, and branch network.',
+      title: 'About Us | Ceylon Escapes',
+      description: 'Meet the local team behind Ceylon Escapes. Our story, vision, mission and how we plan private trips across Sri Lanka.',
       canonical: `${BASE_URL}/about`
     }
   },
@@ -83,8 +84,8 @@ const routes = [
   {
     path: '/contact', name: 'contact', component: ContactUsPage,
     meta: {
-      title: 'Contact Us | CCBE',
-      description: 'Get in touch with Cambridge College of British English. Find our 8 branch locations across Sri Lanka — Galle, Ambalangoda, Matara, Piliyandala, Horana, and Kalutara.',
+      title: 'Contact Us | Ceylon Escapes',
+      description: 'Call, WhatsApp or email Ceylon Escapes, or send us a message about your Sri Lanka trip. We usually reply within 24 hours.',
       canonical: `${BASE_URL}/contact`
     }
   },
@@ -130,6 +131,18 @@ const routes = [
       canonical: `${BASE_URL}/plan-your-trip`
     }
   },
+
+  // ── Tours (NEW) ─────────────────────────────────────────────────────────
+  {
+    path: '/tours', name: 'ToursPage', component: ToursPage,
+    meta: {
+      title: 'Tours | Ceylon Escapes',
+      description: 'Browse our Sri Lanka tour routes, from short coastal escapes to two-week island circuits. Every trip is private, flexible and planned around you.',
+      canonical: `${BASE_URL}/tours`
+    }
+  },
+  { path: '/packages', redirect: '/tours' },
+  { path: '/plan', redirect: '/plan-your-trip' },
 
   // ── Destinations (NEW) ──────────────────────────────────────────────────
   {

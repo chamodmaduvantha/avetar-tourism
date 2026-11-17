@@ -543,6 +543,7 @@ export default {
                         { text: 'All destinations', desc: 'See every place we cover', icon: 'explore', link: '/destinations' },
                     ],
                 },
+                { text: 'Tours', link: '/tours' },
                 { text: 'Gallery', link: '/gallery' },
                 { text: 'About', link: '/about' },
             ],
