@@ -543,16 +543,6 @@ export default {
                         { text: 'All destinations', desc: 'See every place we cover', icon: 'explore', link: '/destinations' },
                     ],
                 },
-                {
-                    text: 'Experiences',
-                    link: '/experiences',
-                    children: [
-                        { text: 'Tours & Packages', desc: 'Ready-made island itineraries', icon: 'luggage', link: '/tours' },
-                        { text: 'Whale Watching', desc: 'Blue whales off Mirissa', icon: 'sailing', link: '/experiences/whales' },
-                        { text: 'Food & Culture', desc: 'Cooking classes, festivals', icon: 'restaurant', link: '/experiences/culture' },
-                    ],
-                },
-                { text: 'Stay', link: '/stay' },
                 { text: 'Gallery', link: '/gallery' },
                 { text: 'About', link: '/about' },
             ],

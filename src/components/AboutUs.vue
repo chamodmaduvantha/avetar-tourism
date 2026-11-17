@@ -1,775 +1,1504 @@
 <template>
-  <div>
-    <NavBar></NavBar>
-    <div class="container">
-      <div class="logo-container mt-3" data-aos="zoom-in-up" data-aos-duration="2000">
-        <img :src="logo" alt="Company Logo" width="200" height="150" id="logo">
-      </div>
-      <h1 class="title mt-5" data-aos="fade-up" data-aos-duration="3000">ABOUT <span class="highlight">CCBE</span>
-      </h1>
-      <br>
-      <div class="center-container">
-        <div class="row">
-          <img class="center-image" data-aos="zoom-out" data-aos-duration="2000" src="https://ik.imagekit.io/u3wbiya66/Board.jpg?updatedAt=1737883142390" alt="Board">
-          <p class="paragraph mt-2" data-aos="fade-up" data-aos-duration="3000">
-            Established on September 3rd, 2015, our institution proudly functions as a distinguished
-            Cambridge English
-            Exam Preparation Centre (CELA Centre). Recognized as a designated Cambridge Qualifications
-            registration
-            center for the esteemed British Council in Colombo, Sri Lanka, we specialize in facilitating
-            University of
-            Cambridge Examinations.
-            With a steadfast commitment to academic excellence, we provide comprehensive and tailored
-            preparatory
-            programs to empower individuals seeking success in Cambridge English exams. Our longstanding
-            association
-            with the British Council underscores our dedication to upholding the highest standards in
-            education,
-            ensuring that our students are well-equipped to excel in their academic pursuits.
-          </p>
+  <!-- The ONLY nav bar on this page. Do not add another one here or in a parent layout. -->
+  <LankaNavBar />
+
+  <main class="ab-page">
+    <!-- ===== Hero ===== -->
+    <section class="ab-hero" aria-labelledby="ab-title">
+      <span class="ab-hero-photo" :style="{ backgroundImage: `url(${heroBg})` }" aria-hidden="true"></span>
+      <span class="ab-hero-shade" aria-hidden="true"></span>
+
+      <div class="ab-wrap ab-hero-inner">
+        <nav class="ab-crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">About us</span>
+        </nav>
+
+        <h1 id="ab-title" class="ab-hero-title">Local people who know the island by heart</h1>
+        <p class="ab-hero-lead">
+          {{ brandName }} is a Sri Lankan travel company. We plan trips with local guides,
+          honest advice and a real person on the phone from your first message to your last day.
+        </p>
+
+        <div class="ab-hero-actions">
+          <a href="/plan-your-trip" class="ab-btn ab-btn-sun">Plan my trip</a>
+          <a href="#ab-story" class="ab-btn ab-btn-line">Read our story</a>
         </div>
       </div>
 
-      <div class="divider"></div>
+      <ul class="ab-hero-facts" aria-label="At a glance">
+        <li v-for="f in heroFacts" :key="f.label">
+          <strong>{{ f.value }}</strong>
+          <span>{{ f.label }}</span>
+        </li>
+      </ul>
 
-      <!-- FIXED: Vision & Mission Title - Now properly centered -->
-      <div class="vision-mission-title">
-        <h1 class="title mt-5" data-aos="fade-up" data-aos-duration="3000">
-          <span class="highlight">OUR VISION</span> & <span class="highlight">OUR MISSION</span>
-        </h1>
-      </div>
-    </div>
-    
-    <div class="parallax-section">
-      <div class="parallax-content">
-        <p class="paragraph mt-2 ml-1 mr-1" data-aos="fade-up" data-aos-duration="3000">
-          <b>Our Mission </b>is to excel as a premier Cambridge English Assessment preparation center in Sri Lanka. We are dedicated to providing an exceptional learning experience, fostering language proficiency, critical thinking, and global awareness. Through innovative teaching and a commitment to student success, we aim to be the preferred choice for effective Cambridge English Assessment preparation, making a lasting impact on our students' academic and personal growth.
-        </p>
-        <br>
+      <svg class="ab-hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,40 C240,90 480,0 720,36 C960,72 1200,10 1440,44 L1440,80 L0,80 Z" fill="#ffffff" />
+      </svg>
+    </section>
 
-        <div class="content">
-          <p class="paragraph mt-2 ml-1 mr-1" data-aos="fade-up" data-aos-duration="3000">
-            <b>Our Vision </b>is to lead as the top Cambridge English Assessment preparation center in Sri Lanka, dedicated to fostering excellence in language proficiency and academic success. We aim to provide an inspiring learning environment, utilizing innovative teaching methods and resources to empower students for success in a globalized world.
+    <!-- ===== Our story ===== -->
+    <section id="ab-story" class="ab-section" aria-labelledby="ab-story-heading">
+      <span class="ab-blob" aria-hidden="true"></span>
+      <div class="ab-wrap ab-story-grid">
+        <div class="ab-story-text">
+          <p class="ab-eyebrow">Our story</p>
+          <h2 id="ab-story-heading" class="ab-h2">We started with one idea: show visitors the Sri Lanka we grew up in</h2>
+          <span class="ab-rule" aria-hidden="true"></span>
+          <p class="ab-lead">
+            Most visitors see the same five stops from the back of a coach. We wanted to offer
+            something different: quieter roads, family-run guesthouses, a driver who knows which
+            temple is calm at 7 am, and a guide who can tell you the story behind what you are
+            looking at.
+          </p>
+          <p class="ab-lead">
+            Today we plan private and small-group trips across the whole island, from the Cultural
+            Triangle to the hill country and the southern coast. Every route is built around the
+            traveller, and every trip is checked by someone on our team who has been there.
+          </p>
+        </div>
+
+        <div class="ab-collage">
+          <figure class="ab-collage-a">
+            <img :src="storyImages[0]" alt="Sigiriya rock fortress" loading="lazy" />
+          </figure>
+          <figure class="ab-collage-b">
+            <img :src="storyImages[1]" alt="Galle Fort ramparts" loading="lazy" />
+          </figure>
+          <figure class="ab-collage-c">
+            <img :src="storyImages[2]" alt="Mirissa beach" loading="lazy" />
+          </figure>
+          <p class="ab-collage-badge">
+            <strong>{{ foundedLabel }}</strong>
+            <span>Planning trips across Sri Lanka</span>
           </p>
         </div>
       </div>
-    </div>
-    
-    <div class="container">
-      <div class="divider"></div>
-      <br>
-      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
-        OUR <span class="highlight mt-3">BRANCH NETWORK</span>
-      </h1>
+    </section>
 
-      <div class="center-container-Branch mt-3">
-  <!-- Image Container -->
-  <div class="image-container">
+    <!-- ===== Stats band ===== -->
+    <section class="ab-stats" ref="statsSection" aria-label="Our experience in numbers">
+      <div class="ab-wrap ab-stats-grid">
+        <div class="ab-stat" v-for="stat in stats" :key="stat.label">
+          <p class="ab-stat-value">{{ stat.value.toLocaleString() }}{{ stat.suffix }}</p>
+          <p class="ab-stat-label">{{ stat.label }}</p>
+        </div>
+      </div>
+    </section>
 
-    <!-- Main Image -->
-    <img
-      data-aos="zoom-out"
-      data-aos-duration="2000"
-      width="390"
-      height="490"
-      :src="branchImage"
-      alt="Branch Network"
-      class="branch-map"
-    />
+    <!-- ===== Vision & Mission ===== -->
+    <section id="ab-vision-mission" class="ab-section ab-sand" aria-labelledby="ab-vm-heading">
+      <div class="ab-wrap">
+        <div class="ab-head">
+          <p class="ab-eyebrow">Who we are</p>
+          <h2 id="ab-vm-heading" class="ab-h2">Our vision and our mission</h2>
+        </div>
 
-    <!-- Ambalangoda -->
-    <div
-      class="point"
-      :style="{ top: '74.5%', left: '36%' }"
-      @click="navigateTo('/about/ambalangoda')"
-    >
-      <span class="point-tooltip">
-        Ambalangoda College
-      </span>
-    </div>
+        <div class="ab-vm-grid">
+          <article class="ab-vm" v-for="v in visionMission" :key="v.title">
+            <span class="ab-icon-tile" aria-hidden="true">{{ v.icon }}</span>
+            <h3 class="ab-vm-title">{{ v.title }}</h3>
+            <blockquote class="ab-vm-text">{{ v.text }}</blockquote>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <!-- Galle -->
-    <div
-      class="point"
-      :style="{ top: '82%', left: '42%' }"
-      @click="navigateTo('/about/galle')"
-    >
-      <span class="point-tooltip">
-        Galle College
-      </span>
-    </div>
+    <!-- ===== What we stand for ===== -->
+    <section class="ab-section" aria-labelledby="ab-values-heading">
+      <div class="ab-wrap">
+        <div class="ab-head">
+          <p class="ab-eyebrow">What we stand for</p>
+          <h2 id="ab-values-heading" class="ab-h2">Four promises behind every trip</h2>
+          <p class="ab-sub">These guide how we plan, who we work with and how we treat the places you visit.</p>
+        </div>
 
-    <!-- Matara -->
-    <div
-      class="point"
-      :style="{ top: '81%', left: '57%' }"
-      @click="navigateTo('/about/matara')"
-    >
-      <span class="point-tooltip">
-        Matara College
-      </span>
-    </div>
+        <div class="ab-values-grid">
+          <article class="ab-value" v-for="p in promises" :key="p.title">
+            <span class="ab-icon-tile ab-icon-tile-sm" aria-hidden="true">{{ p.icon }}</span>
+            <h3 class="ab-value-title">{{ p.title }}</h3>
+            <p class="ab-value-text">{{ p.text }}</p>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <!-- Piliyandala -->
-    <div
-      class="point"
-      :style="{ top: '64.8%', left: '36.5%' }"
-      @click="navigateTo('/about/piliyandala')"
-    >
-      <span class="point-tooltip">
-        Piliyandala College
-      </span>
-    </div>
+    <!-- ===== What we arrange ===== -->
+    <section class="ab-section ab-sand" aria-labelledby="ab-arrange-heading">
+      <div class="ab-wrap ab-arrange-grid">
+        <div class="ab-arrange-intro">
+          <p class="ab-eyebrow">What we arrange</p>
+          <h2 id="ab-arrange-heading" class="ab-h2">Everything between the airport and the beach</h2>
+          <p class="ab-sub">
+            Take one piece or the whole journey. Tell us what you need and we will price it as a
+            single plan.
+          </p>
+          <a href="/plan-your-trip" class="ab-btn ab-btn-solid">Plan my trip</a>
+        </div>
 
-    <!-- Horana -->
-    <div
-      class="point"
-      :style="{ top: '68.5%', left: '34%' }"
-      @click="navigateTo('/about/horana')"
-    >
-      <span class="point-tooltip">
-        Horana College
-      </span>
-    </div>
+        <ul class="ab-services">
+          <li class="ab-service" v-for="s in services" :key="s.title">
+            <span class="ab-service-mark" aria-hidden="true"></span>
+            <div>
+              <h3 class="ab-service-title">{{ s.title }}</h3>
+              <p class="ab-service-text">{{ s.text }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
 
-    <!-- Kalutara -->
-    <div
-      class="point"
-      :style="{ top: '65%', left: '30.5%' }"
-      @click="navigateTo('/about/kalutara')"
-    >
-      <span class="point-tooltip">
-        Kalutara College
-      </span>
-    </div>
+    <!-- ===== Where we work ===== -->
+    <section class="ab-section" aria-labelledby="ab-where-heading">
+      <div class="ab-wrap">
+        <div class="ab-head">
+          <p class="ab-eyebrow">Where we work</p>
+          <h2 id="ab-where-heading" class="ab-h2">From the ancient cities to the southern coast</h2>
+          <p class="ab-sub">Pick a place to read more, or ask us about the quiet corners in between.</p>
+        </div>
 
-    <!-- Matugama -->
-    <div
-      class="point"
-      :style="{ top: '68.5%', left: '38.5%' }"
-      @click="navigateTo('/about/matugama')"
-    >
-      <span class="point-tooltip">
-        Matugama College
-      </span>
-    </div>
+        <div class="ab-places">
+          <a v-for="d in places" :key="d.name" :href="d.link" class="ab-place">
+            <span class="ab-place-photo" :style="{ backgroundImage: `url(${d.src})` }"></span>
+            <span class="ab-place-shade"></span>
+            <span class="ab-place-text">
+              <span class="ab-place-region">{{ d.region }}</span>
+              <span class="ab-place-name">{{ d.name }}</span>
+            </span>
+          </a>
+        </div>
 
-    <!-- Beliatta -->
-    <div
-      class="point"
-      :style="{ top: '75.5%', left: '72%' }"
-      @click="navigateTo('/about/beliatta')"
-    >
-      <span class="point-tooltip">
-        Beliatta College
-      </span>
-    </div>
-
-  </div>
-</div>
-      
-      <div v-if="selectedOffice" class="text-center mt-5">
-        <h3>{{ selectedOffice.name }}</h3>
-        <p>{{ selectedOffice.address }}</p>
-        <p><a
-            :href="'tel:' + selectedOffice.phone.split('/')[0].replace(/\s/g,'')"
-            class="branch-card-phone"
-            >
-            {{ selectedOffice.phone }}
-            </a>
-        </p>
-        <p><a
-            :href="'tel:' + selectedOffice.phone1.split('/')[0].replace(/\s/g,'')"
-            class="branch-card-phone"
-            >
-            {{ selectedOffice.phone1 }}
-            </a>
+        <p class="ab-places-more">
+          <a href="/destinations">See all destinations</a>
         </p>
       </div>
-      
-      <div>
-        <div class="office-buttons">
-          <button 
-            v-for="(office, index) in offices" 
-            :key="index" 
-            data-aos="zoom-out" 
-            data-aos-duration="2000" 
-            class="office-btn" 
-            @click="selectOffice(office)"
+    </section>
+
+    <!-- ===== How it works (a real sequence, so numbered) ===== -->
+    <section class="ab-section ab-sand" aria-labelledby="ab-steps-heading">
+      <div class="ab-wrap">
+        <div class="ab-head">
+          <p class="ab-eyebrow">How it works</p>
+          <h2 id="ab-steps-heading" class="ab-h2">From first message to the last day</h2>
+          <p class="ab-sub">Four steps, and you can talk to the same person at each one.</p>
+        </div>
+
+        <ol class="ab-steps">
+          <li class="ab-step" v-for="(s, i) in steps" :key="s.title">
+            <span class="ab-step-num">{{ i + 1 }}</span>
+            <h3 class="ab-step-title">{{ s.title }}</h3>
+            <p class="ab-step-text">{{ s.text }}</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== Team ===== -->
+    <section class="ab-section" aria-labelledby="ab-team-heading">
+      <div class="ab-wrap">
+        <div class="ab-head">
+          <p class="ab-eyebrow">Our team</p>
+          <h2 id="ab-team-heading" class="ab-h2">The people you will talk to</h2>
+          <p class="ab-sub">A small team that plans your trip and stays reachable while you travel.</p>
+        </div>
+
+        <div class="ab-team-grid">
+          <article class="ab-member" v-for="m in team" :key="m.name">
+            <span class="ab-member-photo">
+              <img v-if="m.photo" :src="m.photo" :alt="m.name" loading="lazy" />
+              <span v-else aria-hidden="true">{{ initials(m.name) }}</span>
+            </span>
+            <h3 class="ab-member-name">{{ m.name }}</h3>
+            <p class="ab-member-role">{{ m.role }}</p>
+            <p class="ab-member-text">{{ m.text }}</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="ab-section ab-sand" aria-labelledby="ab-faq-heading">
+      <div class="ab-wrap ab-faq-grid">
+        <div class="ab-faq-intro">
+          <p class="ab-eyebrow">Questions</p>
+          <h2 id="ab-faq-heading" class="ab-h2">Before you get in touch</h2>
+          <p class="ab-sub">
+            Cannot find your answer? Call {{ phoneDisplay }} or send an inquiry and we will reply
+            within 24 hours.
+          </p>
+        </div>
+
+        <div class="ab-faq-list">
+          <div
+            class="ab-faq"
+            v-for="(f, i) in faqs"
+            :key="f.q"
+            :class="{ 'is-open': openFaq === i }"
           >
-            {{ office.name }}
-          </button>
+            <h3 class="ab-faq-q">
+              <button
+                type="button"
+                class="ab-faq-btn"
+                :id="`ab-faq-btn-${i}`"
+                :aria-expanded="openFaq === i ? 'true' : 'false'"
+                :aria-controls="`ab-faq-panel-${i}`"
+                @click="toggleFaq(i)"
+              >
+                <span>{{ f.q }}</span>
+                <span class="ab-faq-icon" aria-hidden="true"></span>
+              </button>
+            </h3>
+            <div
+              class="ab-faq-panel"
+              :id="`ab-faq-panel-${i}`"
+              role="region"
+              :aria-labelledby="`ab-faq-btn-${i}`"
+            >
+              <p class="ab-faq-a">{{ f.a }}</p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="divider"></div>
-    </div>
-    <!-- ── Back to Home Link ── -->
-      <div class="home-link-section" data-aos="fade-up" data-aos-duration="1500">
-        <p>Looking for something else?</p>
-        <a href="/" class="home-link-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          Back to Home
-        </a>
-        <div class="quick-nav-links">
-          <a href="/courses" class="qnl">Our Programmes</a>
-          <!-- <a href="/about" class="qnl">About CCBE</a> -->
-          <a href="/news" class="qnl">News & Events</a>
-          <a href="/corevalues" class="qnl">Core Values</a>
+    </section>
+
+    <!-- ===== CTA ===== -->
+    <section class="ab-cta" aria-labelledby="ab-cta-heading">
+      <span class="ab-cta-bg" :style="{ backgroundImage: `url(${ctaBg})` }" aria-hidden="true"></span>
+      <div class="ab-wrap ab-cta-inner">
+        <h2 id="ab-cta-heading" class="ab-cta-title">Tell us when you are coming. We will plan the rest.</h2>
+        <div class="ab-cta-actions">
+          <a href="/plan-your-trip" class="ab-btn ab-btn-sun">Plan my trip</a>
+          <a :href="`tel:${phoneRaw}`" class="ab-btn ab-btn-line">Call {{ phoneDisplay }}</a>
+          <a
+            :href="whatsappLink"
+            class="ab-btn ab-btn-whatsapp"
+            target="_blank"
+            rel="noopener noreferrer"
+          >WhatsApp us</a>
         </div>
       </div>
-    <ArrowButton></ArrowButton>
-    <ChatBot></ChatBot>
-    <FooterPage></FooterPage>
-  </div>
+    </section>
+
+    <!-- ===== Quick links ===== -->
+    <section class="ab-more" aria-label="More pages">
+      <div class="ab-wrap">
+        <p class="ab-more-label">Looking for something else?</p>
+        <div class="ab-more-links">
+          <a href="/" class="ab-pill">Back to home</a>
+          <a href="/destinations" class="ab-pill">Destinations</a>
+          <a href="/gallery" class="ab-pill">Gallery</a>
+          <a href="/contact" class="ab-pill">Contact us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <ArrowButton></ArrowButton>
+  <FooterPage></FooterPage>
 </template>
 
 <script>
-import NavBar from './NavBar.vue'
-import FooterPage from './FooterPage.vue'
-import ChatBot from './ChatBot.vue';
-import ArrowButton from './ArrowButton.vue';
-// AOS Transition
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import LankaNavBar from "./Lankanavbar.vue";
+import FooterPage from "./FooterPage.vue";
+import ArrowButton from "./ArrowButton.vue";
+
+// Same local images the home page uses (src/assets/carousel)
+import imgAmbuluwawa from "@/assets/carousel/Ambuluwawa.jpg";
+import imgBeach from "@/assets/carousel/Beach.jpg";
+import imgGalle from "@/assets/carousel/Gallefort.jpg";
+import imgMirissa from "@/assets/carousel/Mirissa.jpg";
+import imgNineArch from "@/assets/carousel/Ninearch.jpg";
+import imgSigiriya from "@/assets/carousel/Seegiriya.png";
 
 export default {
-  name: 'AboutPage',
+  name: "AboutUsPage",
   components: {
-    NavBar,
+    LankaNavBar,
     FooterPage,
-    ChatBot,
-    ArrowButton
-  },
-  mounted() {
-    AOS.init(); // Initialize AOS when the component is mounted
-  },
-  methods: {
-    selectOffice(office) {
-      this.selectedOffice = office;
-    },
-    navigateTo(link) {
-      console.log('Navigating to:', link);
-      if (link) {
-        this.$router.push(link);
-      } else {
-        console.warn("No link provided for this point.");
-      }
-    },
+    ArrowButton,
   },
   data() {
     return {
-      logo: require('@/assets/Logo.png'),
-      branchImage: require('@/assets/Branch_Network2.png'),
-      offices: [
+      // ---- EDIT: brand details (keep in sync with the nav bar, home page and footer) ----
+      brandName: "Ceylon Escapes",
+      phoneRaw: "+94776809002",
+      phoneDisplay: "+94 77 680 9002",
+      // WhatsApp needs the number in international format with no + and no spaces
+      whatsappNumber: "94776809002",
+      whatsappMessage: "Hello, I would like to plan a trip to Sri Lanka.",
+      // Shown on the badge in "Our story". Example: "Since 2015"
+      foundedLabel: "Local since day one",
+      // -----------------------------------------------------------------------------------
+
+      heroBg: imgSigiriya,
+      ctaBg: imgBeach,
+      storyImages: [imgSigiriya, imgGalle, imgMirissa],
+
+      heroFacts: [
+        { value: "Local guides", label: "Licensed and experienced" },
+        { value: "Free planning", label: "No charge for a trip plan" },
+        { value: "24 hours", label: "Usual reply to inquiries" },
+      ],
+
+      visionMission: [
         {
-          name: "Galle College",
-          address: "No 118, Old Matara Rd, Galle, 80000",
-          phone: "+94 91 223 7373",
-          phone1: ""
+          icon: "◎",
+          title: "Our Vision",
+          text: "“To become a globally recognized tourism destination management organization, showcasing the beauty, culture, heritage, and hospitality of Sri Lanka while creating unforgettable travel experiences for visitors from around the world.”",
         },
         {
-          name: "Ambalangoda College",
-          address: "No 97, New Rd, Ambalangoda, 80300",
-          phone: "+94 91 225 2452",
-          phone1: ""
-        },
-        {
-          name: "Matara College",
-          address: "No 352, Kumarathunga Mw, Matara, 81000",
-          phone: "+94 41 205 0200",
-          phone1: ""
-        },
-        {
-          name: "Piliyandala College",
-          address: "No 119, Moratuwa Rd, Suwarapola, Piliyandala, 10300",
-          phone: "+94 11 218 0008",
-          phone1: ""
-        },
-        {
-          name: "Horana College",
-          address: "No 149, Graceland Circular Rd, Horana, 12400",
-          phone: "+94 34 220 5503",
-          phone1: ""
-        },
-        {
-          name: "Kalutara College",
-          address: "No 85, Maha Waskaduwa, Waskaduwa, 12580",
-          phone: "+94 34 212 1210",
-          phone1: ""
-        },
-        {
-          name: "Matugama College",
-          address: "No 57/D, Aluthgama Rd, Matugama, 12100",
-          phone: "+94 34 212 1477",
-          phone1: "+94 70 506 0666",
-        },
-        {
-          name: "Beliatta College",
-          address: "Opposite Bus Stand, No 50 Tangalle Rd, Beliatta 82400",
-          phone: "+94 47 225 2175",
-          phone1: "",
+          icon: "➤",
+          title: "Our Mission",
+          text: "“To promote and develop sustainable tourism in Sri Lanka by delivering exceptional travel experiences, preserving our natural and cultural heritage, supporting local communities, and providing high-quality, reliable, and personalized tourism services. We are committed to connecting visitors with the authentic beauty, traditions, and hospitality of Sri Lanka while contributing to the growth of the national tourism industry.”",
         },
       ],
-      selectedOffice: null,
+
+      // Placeholder numbers: replace with your real figures (same as the home page).
+      stats: [
+        { label: "Happy travellers", target: 5000, suffix: "+", value: 0, duration: 2000 },
+        { label: "Trips completed", target: 1200, suffix: "+", value: 0, duration: 1600 },
+        { label: "Years of experience", target: 10, suffix: "+", value: 0, duration: 1000 },
+        { label: "UNESCO World Heritage Sites on our routes", target: 8, suffix: "", value: 0, duration: 900 },
+      ],
+      animationFrames: [],
+      observer: null,
+
+      promises: [
+        {
+          icon: "✦",
+          title: "Honest advice",
+          text: "We tell you when a place is crowded, when it is not worth the drive and when the weather will get in the way.",
+        },
+        {
+          icon: "♥",
+          title: "Local first",
+          text: "Family-run stays, village lunches and licensed local guides, so your money stays in the communities you visit.",
+        },
+        {
+          icon: "☘",
+          title: "Travel with care",
+          text: "Small groups, respectful wildlife viewing and temple etiquette explained before you arrive.",
+        },
+        {
+          icon: "✔",
+          title: "Support on the road",
+          text: "A real person to call or message during your trip if plans change or something goes wrong.",
+        },
+      ],
+
+      services: [
+        {
+          title: "Tour packages",
+          text: "Ready-made island itineraries that we can shorten, stretch or mix with another.",
+        },
+        {
+          title: "Day trips",
+          text: "A single sunrise climb, a safari or a train ride, with a driver and guide for the day.",
+        },
+        {
+          title: "Hotels and stays",
+          text: "Hotels, villas and guesthouses chosen for location and character, across several budgets.",
+        },
+        {
+          title: "Guides and transport",
+          text: "Licensed guides and comfortable vehicles, so you can focus on the view.",
+        },
+      ],
+
+      // Links match the Destinations menu in the nav bar.
+      places: [
+        { name: "Sigiriya", region: "Cultural Triangle", src: imgSigiriya, link: "/destinations/sigiriya" },
+        { name: "Ella", region: "Hill country", src: imgNineArch, link: "/destinations/ella" },
+        { name: "Kandy", region: "Central highlands", src: imgAmbuluwawa, link: "/destinations/kandy" },
+        { name: "Galle", region: "South coast", src: imgGalle, link: "/destinations/galle" },
+        { name: "Mirissa", region: "South coast", src: imgMirissa, link: "/destinations/mirissa" },
+      ],
+
+      steps: [
+        {
+          title: "Tell us what you love",
+          text: "Share your dates, interests and budget through the inquiry form, by phone or on WhatsApp.",
+        },
+        {
+          title: "We draft your route",
+          text: "You get a day-by-day plan with stays, transport and guides, usually within 24 hours.",
+        },
+        {
+          title: "Adjust until it fits",
+          text: "Swap a stop, slow the pace or add a beach day. We revise until you are happy with it.",
+        },
+        {
+          title: "Travel with a guide",
+          text: "Your driver and guide meet you on arrival, and our team stays reachable for the whole trip.",
+        },
+      ],
+
+      // Placeholder team: replace names, roles and text. Add `photo: require('@/assets/team/name.jpg')`
+      // to a member to show a photo instead of initials.
+      team: [
+        {
+          name: "Founder Name",
+          role: "Founder and lead planner",
+          text: "Designs the island routes and checks every new stay in person.",
+        },
+        {
+          name: "Guide Name",
+          role: "Senior guide",
+          text: "Licensed national guide with deep knowledge of the Cultural Triangle.",
+        },
+        {
+          name: "Coordinator Name",
+          role: "Guest support",
+          text: "Your contact before and during the trip, in English and Sinhala.",
+        },
+      ],
+
+      openFaq: 0,
+      faqs: [
+        {
+          q: "Do you offer private trips or small groups?",
+          a: "Both. Most trips are private for your own group, and we can also arrange small-group days. Tell us your preference and we will plan around it.",
+        },
+        {
+          q: "Can I change the route after you send it?",
+          a: "Yes. Every itinerary can be shortened, stretched or mixed with another. We revise it with you until it fits your dates, pace and budget.",
+        },
+        {
+          q: "What do you arrange for me?",
+          a: "Stays, transport, licensed guides and activities such as safaris, train rides and cultural visits. You can book the whole journey or just the parts you need.",
+        },
+        {
+          q: "How quickly will I hear back?",
+          a: "We usually reply to inquiries within 24 hours. Our office is open Monday to Saturday, 8:30 am to 6:00 pm, and you can also reach us on WhatsApp.",
+        },
+        {
+          q: "When is the best time to visit?",
+          a: "Sri Lanka has two monsoons, so there is always a sunny coast. The south and west are best from December to March, the east from April to September, and the hill country from January to April.",
+        },
+      ],
+    };
+  },
+  computed: {
+    whatsappLink() {
+      return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(this.whatsappMessage)}`;
+    },
+  },
+  mounted() {
+    // Count the stats up once, when the band scrolls into view
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          this.runCounters();
+          this.observer.disconnect();
+        }
+      },
+      { root: null, rootMargin: "0px", threshold: 0.4 }
+    );
+    if (this.$refs.statsSection) {
+      this.observer.observe(this.$refs.statsSection);
     }
-  }
-}
+  },
+  beforeUnmount() {
+    if (this.observer) this.observer.disconnect();
+    this.animationFrames.forEach((id) => cancelAnimationFrame(id));
+  },
+  methods: {
+    initials(name) {
+      return name
+        .split(" ")
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((w) => w[0].toUpperCase())
+        .join("");
+    },
+    toggleFaq(i) {
+      this.openFaq = this.openFaq === i ? -1 : i;
+    },
+    runCounters() {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      this.stats.forEach((stat) => {
+        if (reduce) {
+          stat.value = stat.target;
+          return;
+        }
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min((now - start) / stat.duration, 1);
+          const eased = 1 - Math.pow(1 - t, 3); // ease-out
+          stat.value = Math.round(stat.target * eased);
+          if (t < 1) {
+            this.animationFrames.push(requestAnimationFrame(tick));
+          }
+        };
+        this.animationFrames.push(requestAnimationFrame(tick));
+      });
+    },
+  },
+};
 </script>
 
 <style scoped>
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+/*
+  All class names on this page start with "ab-" so they can never clash with the
+  nav bar's global "lk-" styles.
+*/
+
+/* ===== TOKENS (same blue theme as the home page and footer) ===== */
+.ab-page {
+  --navy: #0b2a4a;
+  --blue: #1565c0;
+  --blue-bright: #1e88e5;
+  --sky: #8ec9ff;
+  --sand: #f6f1e7;
+  --sun: #f5b94a;
+  --text: #1f2933;
+  --muted: #52606d;
+  --shadow-sm: 0 4px 14px rgba(11, 42, 74, 0.08);
+  --shadow-md: 0 14px 34px rgba(11, 42, 74, 0.16);
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  font-family: var(--font-body);
+  color: var(--text);
+  overflow-x: hidden;
 }
 
-/* Row */
-.row {
+.ab-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(24px, 4vw);
+  box-sizing: border-box;
+}
+
+.ab-section {
+  position: relative;
+  padding: 96px 0;
+  background: #fff;
+}
+.ab-sand {
+  background: var(--sand);
+}
+
+/* ===== TYPE ===== */
+.ab-h2,
+.ab-hero-title,
+.ab-cta-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-wrap: balance;
+}
+.ab-h2 {
+  margin: 0 0 10px;
+  max-width: 24ch;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.15;
+  text-align: left;
+  text-transform: none;
+  color: var(--navy);
+}
+.ab-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.ab-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--sun);
+  border-radius: 2px;
+}
+.ab-rule {
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin: 22px 0;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--sun), var(--blue-bright));
+}
+.ab-lead {
+  margin: 0 0 16px;
+  max-width: 60ch;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.ab-sub {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.ab-head {
+  margin-bottom: 44px;
+}
+
+/* ===== HERO ===== */
+.ab-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: clamp(520px, 78vh, 660px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 72px 0 150px;
+  color: #fff;
+  background: var(--navy);
+}
+.ab-hero-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  /* the one deliberate motion on this page: a slow settle on load */
+  animation: ab-drift 14s ease-out forwards;
+}
+@keyframes ab-drift {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+.ab-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to top, rgba(11, 42, 74, 0.9) 0%, rgba(11, 42, 74, 0) 40%),
+    linear-gradient(to right, rgba(11, 42, 74, 0.85) 0%, rgba(11, 42, 74, 0.45) 55%, rgba(21, 101, 192, 0.2) 100%);
+}
+.ab-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.ab-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+.ab-crumbs a {
+  color: var(--sky);
+  text-decoration: none;
+}
+.ab-crumbs a:hover {
+  text-decoration: underline;
+}
+.ab-hero-title {
+  margin: 0 0 18px;
+  max-width: 18ch;
+  font-size: clamp(2.2rem, 5.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-align: left;
+  text-transform: none;
+}
+.ab-hero-lead {
+  margin: 0 0 30px;
+  max-width: 54ch;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+.ab-hero-actions {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 -15px;
+  gap: 12px;
 }
-
-/* Title */
-.title {
-  color: #FBB700;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  width: 100%;
-}
-
-.highlight {
-  color: #FF5F15;
-}
-
-/* FIX: Special container for Vision & Mission title to ensure centering */
-.vision-mission-title {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  text-align: center;
-}
-
-.vision-mission-title .title {
-  text-align: center;
-  display: inline-block;
-}
-
-/* Margin Utilities */
-.mt-2 { margin-top: 0.5rem !important; }
-.mt-3 { margin-top: 1rem !important; }
-.mt-5 { margin-top: 3rem !important; }
-.ml-1 { margin-left: 0.25rem !important; }
-.mr-1 { margin-right: 0.25rem !important; }
-.mb-1 { margin-bottom: 0.25rem !important; }
-
-/* Paragraph */
-.paragraph {
-  font-family: "Roboto", sans-serif;
-  font-size: 20px;
-  font-style: normal;
-  text-align: justify;
-  line-height: 1.6;
-}
-
-#logo {
-  display: block;
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.center-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: column;
-}
-
-.center-image {
-  width: 100%;
-  max-width: 1200px;
-  height: auto;
-  margin: 0 auto;
-  display: block;
-}
-
-/* Divider */
-.divider {
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.12);
-  margin: 2rem 0;
-  width: 100%;
-}
-
-/* Parallax Section */
-.parallax-section {
-  background-image: url('@/assets/BC1.jpg');
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  min-height: 550px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-}
-
-.parallax-section::before {
-  content: '';
+.ab-hero-facts {
   position: absolute;
-  top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.parallax-content {
-  position: relative;
-  z-index: 1;
-  color: white;
-  padding: 2rem;
+  bottom: 62px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 max(24px, 4vw);
+  list-style: none;
+  box-sizing: border-box;
+}
+.ab-hero-facts li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 14px;
+  border-left: 3px solid var(--sun);
+}
+.ab-hero-facts strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: #fff;
+}
+.ab-hero-facts span {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+.ab-hero-wave {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  z-index: 3;
   width: 100%;
+  height: 60px;
+  display: block;
+  pointer-events: none;
 }
 
-.parallax-content .paragraph {
-  color: white;
-  background-color: rgba(89, 79, 0, 0.6);
-  padding: 20px;
-  border-radius: 5px;
+/* ===== OUR STORY ===== */
+.ab-blob {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: rgba(142, 201, 255, 0.4);
+  filter: blur(60px);
+  pointer-events: none;
 }
-
-/* Image Container for Branch Network */
-.image-container {
+.ab-story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.ab-story-text .ab-lead:last-child {
+  margin-bottom: 0;
+}
+.ab-collage {
   position: relative;
-  width: 390px;
-  height: 490px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 16px;
+  height: 480px;
 }
-
-.branch-map {
+.ab-collage figure {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  box-shadow: var(--shadow-md);
+}
+.ab-collage img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  display: block;
+}
+.ab-collage-a {
+  grid-row: span 2;
+}
+.ab-collage-badge {
+  position: absolute;
+  left: -18px;
+  bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-width: 190px;
+  margin: 0;
+  padding: 14px 18px;
+  background: var(--sun);
+  color: var(--navy);
+  border-radius: 14px;
+  box-shadow: var(--shadow-md);
+}
+.ab-collage-badge strong {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.15;
+}
+.ab-collage-badge span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
-/* Points for interactive map */
-/* Points for interactive map */
-.point {
+/* ===== STATS ===== */
+.ab-stats {
+  position: relative;
+  padding: 52px 0;
+  color: #fff;
+  background: linear-gradient(135deg, var(--navy) 0%, #12457a 100%);
+}
+.ab-stats::before {
+  content: "";
   position: absolute;
-  width: 28px;
-  height: 28px;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+.ab-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.ab-stat {
+  padding-left: 18px;
+  border-left: 3px solid var(--sun);
+}
+.ab-stat-value {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1;
+  color: var(--sun);
+}
+.ab-stat-label {
+  margin: 8px 0 0;
+  max-width: 22ch;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
+}
 
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  z-index: 10;
+/* ===== ICON TILE (shared) ===== */
+.ab-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 18px;
+  font-size: 1.5rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(21, 101, 192, 0.35);
+}
+.ab-icon-tile-sm {
+  width: 44px;
+  height: 44px;
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  border-radius: 14px;
+}
 
+/* ===== VISION & MISSION ===== */
+.ab-vm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+.ab-vm {
+  padding: 40px 36px 36px;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-top: 5px solid var(--sun);
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.ab-vm-title {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.8rem;
+  line-height: 1.15;
+  color: var(--navy);
+}
+.ab-vm-text {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* ===== VALUES ===== */
+.ab-values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.ab-value {
+  padding: 28px 24px;
+  background: #f2f8ff;
+  border-left: 5px solid var(--blue-bright);
+  border-radius: 0 16px 16px 0;
+  box-shadow: var(--shadow-sm);
+}
+.ab-value-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.ab-value-text {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ===== WHAT WE ARRANGE ===== */
+.ab-arrange-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 64px;
+  align-items: start;
+}
+.ab-arrange-intro .ab-sub {
+  margin-bottom: 28px;
+}
+.ab-services {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ab-service {
+  display: flex;
+  gap: 16px;
+  padding: 20px 22px;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.ab-service-mark {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  background: var(--sun);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(245, 185, 74, 0.25);
+}
+.ab-service-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.ab-service-text {
+  margin: 0;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* ===== WHERE WE WORK ===== */
+.ab-places {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+.ab-place {
+  position: relative;
+  display: block;
+  height: 280px;
+  overflow: hidden;
+  border-radius: 18px;
+  color: #fff;
+  text-decoration: none;
+  background: var(--navy);
+  box-shadow: var(--shadow-sm);
+}
+.ab-place-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+}
+.ab-place:hover .ab-place-photo,
+.ab-place:focus-visible .ab-place-photo {
+  transform: scale(1.07);
+}
+.ab-place-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11, 42, 74, 0.92) 0%, rgba(11, 42, 74, 0.1) 60%, rgba(11, 42, 74, 0) 100%);
+}
+.ab-place-text {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ab-place-region {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--sun);
+}
+.ab-place-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+.ab-places-more {
+  margin: 24px 0 0;
+}
+.ab-places-more a {
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 2px solid var(--sun);
+}
+.ab-places-more a:hover {
+  color: var(--navy);
+}
+
+/* ===== STEPS ===== */
+.ab-steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* dotted line joining the four numbers */
+.ab-steps::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: 22px;
+  right: 22px;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--sun) 0 10px, transparent 10px 18px);
+}
+.ab-step {
+  position: relative;
+}
+.ab-step-num {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin: 0 0 18px -4px;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--navy);
+  background: var(--sun);
+  border: 4px solid var(--sand);
+  border-radius: 50%;
+  box-sizing: content-box;
+}
+.ab-step-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.ab-step-text {
+  margin: 0;
+  max-width: 28ch;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* ===== TEAM ===== */
+.ab-team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.ab-member {
+  padding: 32px 28px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.ab-member-photo {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Main yellow dot */
-.point::before {
-  content: '';
-  position: absolute;
-
-  width: 15px;
-  height: 15px;
-
-  background-color: rgb(255, 230, 0);
+  width: 112px;
+  height: 112px;
+  margin: 0 auto 18px;
+  overflow: hidden;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+  border: 4px solid var(--sun);
   border-radius: 50%;
-
-  box-shadow: 0 0 18px rgba(255, 230, 0, 0.9);
-
-  animation: pulse-grow 2s infinite;
+}
+.ab-member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ab-member-name {
+  margin: 0 0 4px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.3rem;
+  color: var(--navy);
+}
+.ab-member-role {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--blue);
+}
+.ab-member-text {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
-/* Glow wave effect */
-.point::after {
-  content: '';
-  position: absolute;
-
-  width: 15px;
-  height: 15px;
-
-  border: 2px solid rgba(255, 243, 7, 0.889);
-  border-radius: 50%;
-
-  animation: wave 2s infinite;
+/* ===== FAQ ===== */
+.ab-faq-grid {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 64px;
+  align-items: start;
 }
-
-/* Tooltip beside point */
-.point-tooltip {
+.ab-faq-list {
+  display: grid;
+  gap: 12px;
+}
+.ab-faq {
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-radius: 16px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+.ab-faq.is-open {
+  border-color: var(--sun);
+}
+.ab-faq-q {
+  margin: 0;
+}
+.ab-faq-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 18px 22px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: left;
+  color: var(--navy);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.ab-faq-btn:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: -3px;
+}
+/* plus / minus built from two bars */
+.ab-faq-icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+}
+.ab-faq-icon::before,
+.ab-faq-icon::after {
+  content: "";
   position: absolute;
-
-  left: 30px;
   top: 50%;
-
-  transform: translateY(-50%);
-
-  background-color: white;
-  color: black;
-
-  padding: 10px 18px;
-
-  border: 2px solid #222;
-  border-radius: 4px;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  white-space: nowrap;
-
-  opacity: 0;
-  visibility: hidden;
-
-  transition: all 0.25s ease;
-
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  left: 50%;
+  width: 14px;
+  height: 2px;
+  background: var(--blue);
+  border-radius: 2px;
+  transform: translate(-50%, -50%);
+  transition: transform 0.25s ease;
+}
+.ab-faq-icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.ab-faq.is-open .ab-faq-icon::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+/* panel opens by animating grid row height */
+.ab-faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.ab-faq.is-open .ab-faq-panel {
+  grid-template-rows: 1fr;
+}
+.ab-faq-a {
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  padding: 0 22px;
+  line-height: 1.7;
+  color: var(--muted);
+  transition: padding 0.3s ease;
+}
+.ab-faq.is-open .ab-faq-a {
+  padding: 0 22px 20px;
 }
 
-/* Show tooltip on hover */
-.point:hover .point-tooltip {
-  opacity: 1;
-  visibility: visible;
+/* ===== CTA ===== */
+.ab-cta {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 0;
+  background: var(--navy);
 }
-
-/* Tooltip */
-.tooltip {
+.ab-cta-bg {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 14px;
-  z-index: 100;
-  white-space: nowrap;
-  pointer-events: none;
-  transform: translateX(-50%);
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.35;
+}
+.ab-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(11, 42, 74, 0.92) 0%, rgba(21, 101, 192, 0.78) 100%);
+}
+.ab-cta-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.ab-cta-title {
+  margin: 0;
+  max-width: 24ch;
+  font-size: clamp(1.7rem, 3.2vw, 2.6rem);
+  line-height: 1.15;
+  color: #fff;
+}
+.ab-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-/* Office Buttons */
-.office-buttons {
+/* ===== QUICK LINKS ===== */
+.ab-more {
+  padding: 48px 0 8px;
+  text-align: center;
+  background: #fff;
+}
+.ab-more-label {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.ab-more-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin: 1.5rem 0 3rem;
 }
-
-.office-btn {
-  padding: 12px 24px;
-  background-color: transparent;
-  color: black;
-  border: 2px solid #FBB700;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-}
-
-.office-btn:hover {
-  background-color: #FBB700;
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(251, 183, 0, 0.3);
-}
-
-.office-btn:active {
-  transform: translateY(0);
-}
-
-.office-btn:focus {
-  outline: 2px solid #FBB700;
-  outline-offset: 2px;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-center h3 {
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.text-center p {
-  color: #666;
-  margin-bottom: 5px;
-}
-
-.center-container-Branch {
-  position: relative;
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* ── Back to Home ───────────────────────────────── */
-.home-link-section {
-  text-align: center;
-  padding: 32px 0 16px;
-}
-
-.home-link-section > p {
-  font-size: 0.95rem;
-  color: #888;
-  margin-bottom: 12px;
-}
-
-.home-link-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 28px;
-  background: #FBB700;
-  color: #fff;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.95rem;
+.ab-pill {
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--blue);
   text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(251,183,0,0.3);
+  border: 1.5px solid #cfe0f3;
+  border-radius: 999px;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.ab-pill:hover {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
 }
 
-.home-link-btn:hover {
-  background: #e0a500;
+/* ===== BUTTONS ===== */
+.ab-btn {
+  display: inline-block;
+  padding: 13px 28px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 999px;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease;
+}
+.ab-btn:hover {
   transform: translateY(-2px);
 }
-
-.quick-nav-links {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+.ab-btn-sun {
+  color: var(--navy);
+  background: var(--sun);
+  box-shadow: 0 8px 20px rgba(245, 185, 74, 0.4);
 }
-
-.qnl {
-  font-size: 0.85rem;
-  color: #FF5F15;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 5px 14px;
-  border: 1px solid rgba(255,95,21,0.25);
-  border-radius: 30px;
-  transition: all 0.25s;
+.ab-btn-sun:hover {
+  background: #fff;
 }
-
-.qnl:hover {
-  background: #FF5F15;
+.ab-btn-solid {
   color: #fff;
-  border-color: #FF5F15;
+  background: var(--blue);
+  box-shadow: 0 6px 16px rgba(21, 101, 192, 0.3);
+}
+.ab-btn-solid:hover {
+  background: var(--navy);
+}
+.ab-btn-line {
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+}
+.ab-btn-line:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.ab-btn-whatsapp {
+  color: #fff;
+  background: #128c7e;
+  box-shadow: 0 6px 16px rgba(18, 140, 126, 0.35);
+}
+.ab-btn-whatsapp:hover {
+  background: #0e7266;
+}
+.ab-btn:focus-visible,
+.ab-pill:focus-visible,
+.ab-place:focus-visible,
+.ab-crumbs a:focus-visible,
+.ab-places-more a:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
 }
 
-.text-center {
-  text-align: center;
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.text-center h3 { color: #FBB700; margin-bottom: 10px; }
-.text-center p  { color: #555; margin: 5px 0; font-size: 1rem; }
-
-/* Animations */
-@keyframes pulse-grow {
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1);
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .ab-places {
+    grid-template-columns: repeat(3, 1fr);
   }
-  50% {
-    transform: translate(-50%, -50%) scale(1.2);
+  .ab-place {
+    height: 240px;
   }
 }
 
-@keyframes wave {
-  0% {
-    opacity: 1;
-    transform: scale(1);
+@media (max-width: 1024px) {
+  .ab-story-grid,
+  .ab-arrange-grid,
+  .ab-faq-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
   }
-  100% {
-    opacity: 0;
-    transform: scale(3);
+  .ab-collage-badge {
+    left: 12px;
+  }
+  .ab-stats-grid,
+  .ab-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ab-steps {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 36px;
+  }
+  .ab-steps::before {
+    display: none;
+  }
+  .ab-team-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
-  .container {
-    padding: 0 10px;
+  .ab-section {
+    padding: 60px 0;
   }
-  
-  .title {
-    font-size: 1.75rem;
+  .ab-hero {
+    padding: 48px 0 190px;
   }
-  
-  .paragraph {
-    font-size: 18px;
-    padding: 0 10px;
+  .ab-hero-facts {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    bottom: 56px;
   }
-  
-  .center-image {
-    max-width: 100%;
+  .ab-hero-facts li:nth-child(n + 3) {
+    display: none;
   }
-  
-  .image-container {
-    width: 300px;
-    height: 385px;
+  .ab-collage {
+    height: 380px;
   }
-  
-  .parallax-section {
-    min-height: 450px;
-    background-attachment: scroll;
+  .ab-vm-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .parallax-content {
-    padding: 1rem;
+  .ab-vm {
+    padding: 32px 24px 28px;
   }
-  
-  .office-buttons {
+  .ab-places {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ab-cta {
+    padding: 60px 0;
+  }
+  .ab-cta-inner {
     flex-direction: column;
-    align-items: center;
-  }
-  
-  .office-btn {
-    width: 90%;
-    max-width: 300px;
-    margin-bottom: 10px;
+    align-items: flex-start;
   }
 }
 
-@media (max-width: 480px) {
-  .title {
-    font-size: 1.5rem;
+@media (max-width: 560px) {
+  .ab-values-grid,
+  .ab-steps,
+  .ab-team-grid {
+    grid-template-columns: 1fr;
   }
-  
-  .paragraph {
-    font-size: 16px;
-  }
-  
-  .image-container {
-    width: 250px;
+  .ab-collage {
     height: 320px;
+    gap: 10px;
   }
-  
-  #logo {
-    width: 150px;
-    height: auto;
+  .ab-collage-badge {
+    max-width: 160px;
+    padding: 10px 14px;
+  }
+  .ab-place {
+    height: 200px;
+  }
+  .ab-hero-facts li:nth-child(n + 2) {
+    display: none;
+  }
+  .ab-hero {
+    padding-bottom: 150px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-hero-photo {
+    animation: none;
+  }
+  .ab-place-photo,
+  .ab-btn,
+  .ab-pill,
+  .ab-faq-panel,
+  .ab-faq-a,
+  .ab-faq-icon::before,
+  .ab-faq-icon::after {
+    transition: none;
+  }
+  .ab-btn:hover,
+  .ab-place:hover .ab-place-photo {
+    transform: none;
   }
 }
 </style>

@@ -1,602 +1,959 @@
 <template>
-  <div>
-    <NavBar></NavBar>
-    <div class="container">
+  <!-- The ONLY nav bar on this page. Do not add another one here or in a parent layout. -->
+  <LankaNavBar />
 
-      <div class="logo-container" data-aos="zoom-in-up" data-aos-duration="2000">
-        <img :src="logo" alt="Company Logo" width="200" height="150" id="logo">
+  <main class="ct-page">
+    <!-- ===== Hero ===== -->
+    <section class="ct-hero" aria-labelledby="ct-title">
+      <span class="ct-hero-photo" :style="{ backgroundImage: `url(${heroBg})` }" aria-hidden="true"></span>
+      <span class="ct-hero-shade" aria-hidden="true"></span>
+
+      <div class="ct-wrap ct-hero-inner">
+        <nav class="ct-crumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">Contact us</span>
+        </nav>
+
+        <h1 id="ct-title" class="ct-hero-title">Tell us about your trip</h1>
+        <p class="ct-hero-lead">
+          Questions about a route, a stay or the best time to go? Send us a message and a real
+          person at {{ brandName }} will reply, usually within 24 hours.
+        </p>
+
+        <div class="ct-hero-actions">
+          <a :href="`tel:${phoneRaw}`" class="ct-btn ct-btn-sun">Call {{ phoneDisplay }}</a>
+          <a :href="whatsappLink" class="ct-btn ct-btn-line" target="_blank" rel="noopener noreferrer">WhatsApp us</a>
+        </div>
       </div>
 
-      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
-        CONTACT <span class="highlight">US</span>
-      </h1>
+      <svg class="ct-hero-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0,40 C240,90 480,0 720,36 C960,72 1200,10 1440,44 L1440,80 L0,80 Z" fill="#ffffff" />
+      </svg>
+    </section>
 
-      <p class="subtitle" data-aos="fade-up" data-aos-duration="2000">
-        At the heart of our commitment to communication and service lies our dedication to ensuring every interaction is meaningful, responsive, and supportive.
-      </p>
+    <!-- ===== Contact cards ===== -->
+    <section class="ct-section ct-cards-section" aria-label="Ways to reach us">
+      <div class="ct-wrap">
+        <div class="ct-cards">
+          <article class="ct-card">
+            <span class="ct-icon" aria-hidden="true">&#9742;</span>
+            <h2 class="ct-card-title">Call us</h2>
+            <p class="ct-card-text"><a :href="`tel:${phoneRaw}`">{{ phoneDisplay }}</a></p>
+            <p class="ct-card-note">Hot line, {{ openHours }}</p>
+          </article>
 
-      <!-- Contact Info Cards -->
-      <div class="contact-info-grid" data-aos="fade-up" data-aos-duration="2000">
-        <div class="contact-info-card">
-          <div class="info-body">
-            <h3 class="info-title">Call Us</h3>
-            <p><a href="tel:+94713999666" class="info-link">+94 71 399 9666</a> (Hot Line)</p>
-            <p><a href="tel:+94713999666" class="info-link">+94 91 223 7373</a> (Galle College)</p>
-          </div>
+          <article class="ct-card">
+            <span class="ct-icon" aria-hidden="true">&#9993;</span>
+            <h2 class="ct-card-title">Email us</h2>
+            <p class="ct-card-text"><a :href="`mailto:${email}`">{{ email }}</a></p>
+            <p class="ct-card-note">We reply within 24 hours</p>
+          </article>
+
+          <article class="ct-card">
+            <span class="ct-icon" aria-hidden="true">&#128172;</span>
+            <h2 class="ct-card-title">WhatsApp</h2>
+            <p class="ct-card-text">
+              <a :href="whatsappLink" target="_blank" rel="noopener noreferrer">Message {{ phoneDisplay }}</a>
+            </p>
+            <p class="ct-card-note">Quick questions and photos welcome</p>
+          </article>
+
+          <article class="ct-card">
+            <span class="ct-icon" aria-hidden="true">&#128205;</span>
+            <h2 class="ct-card-title">Visit us</h2>
+            <p class="ct-card-text">{{ address }}</p>
+            <p class="ct-card-note">{{ openHours }}</p>
+          </article>
         </div>
-        <div class="contact-info-card">
-          <div class="info-body">
-            <h3 class="info-title">Email Us</h3>
-            <p><a href="mailto:info@ccbe.lk" class="info-link">info@ccbe.lk</a></p>
-            <p class="info-note">We respond within 24 hours on business days.</p>
-          </div>
+      </div>
+    </section>
+
+    <!-- ===== Form + side panel ===== -->
+    <section id="ct-form" class="ct-section ct-sand" aria-labelledby="ct-form-heading">
+      <div class="ct-wrap ct-form-grid">
+        <div class="ct-form-card">
+          <p class="ct-eyebrow">Send a message</p>
+          <h2 id="ct-form-heading" class="ct-h2">How can we help?</h2>
+          <p class="ct-sub">
+            Fill in what you know. Everything except your name, email and message is optional.
+          </p>
+
+          <form class="ct-form" novalidate @submit.prevent="sendEmail">
+            <div class="ct-field">
+              <label for="ct-name">Name</label>
+              <input
+                id="ct-name"
+                v-model.trim="form.name"
+                :class="{ 'is-invalid': errors.name }"
+                type="text"
+                autocomplete="name"
+                placeholder="Your full name"
+              />
+              <p v-if="errors.name" class="ct-error" role="alert">{{ errors.name }}</p>
+            </div>
+
+            <div class="ct-field">
+              <label for="ct-email">Email</label>
+              <input
+                id="ct-email"
+                v-model.trim="form.email"
+                :class="{ 'is-invalid': errors.email }"
+                type="text"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+              <p v-if="errors.email" class="ct-error" role="alert">{{ errors.email }}</p>
+            </div>
+
+            <div class="ct-field">
+              <label for="ct-phone">Phone or WhatsApp (optional)</label>
+              <input
+                id="ct-phone"
+                v-model.trim="form.phone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="+44 7xxx xxxxxx"
+              />
+            </div>
+
+            <div class="ct-field">
+              <label for="ct-topic">What is this about?</label>
+              <select id="ct-topic" v-model="form.topic">
+                <option v-for="t in topics" :key="t" :value="t">{{ t }}</option>
+              </select>
+            </div>
+
+            <div class="ct-field">
+              <label for="ct-arrival">Arrival date (optional)</label>
+              <input id="ct-arrival" v-model="form.arrival" type="date" :min="today" />
+            </div>
+
+            <div class="ct-field">
+              <label for="ct-people">Number of travellers</label>
+              <input id="ct-people" v-model.number="form.people" type="number" min="1" max="50" />
+            </div>
+
+            <div class="ct-field ct-field-full">
+              <label for="ct-message">Your message</label>
+              <textarea
+                id="ct-message"
+                v-model.trim="form.message"
+                :class="{ 'is-invalid': errors.message }"
+                rows="5"
+                placeholder="Places you would like to visit, special occasions, pace of travel…"
+              ></textarea>
+              <p v-if="errors.message" class="ct-error" role="alert">{{ errors.message }}</p>
+            </div>
+
+            <div class="ct-field-full ct-form-actions">
+              <button type="submit" class="ct-btn ct-btn-solid">Send by email</button>
+              <button type="button" class="ct-btn ct-btn-whatsapp" @click="sendWhatsApp">Send on WhatsApp</button>
+            </div>
+
+            <p class="ct-status" role="status" aria-live="polite">{{ status }}</p>
+          </form>
         </div>
-        <div class="contact-info-card">
-          <div class="info-body">
-            <h3 class="info-title">Opening Hours</h3>
-            <p><b>Mon – Fri :</b> 8:15 AM – 6:00 PM</p>
-            <p><b>Sat & Sun :</b> 7:00 AM – 6:00 PM</p>
+
+        <aside class="ct-side" aria-label="What happens next">
+          <div class="ct-side-card">
+            <h3 class="ct-side-title">What happens next</h3>
+            <ol class="ct-next">
+              <li>
+                <strong>We read your message</strong>
+                <span>Someone on our team goes through it, not an automatic reply.</span>
+              </li>
+              <li>
+                <strong>You hear back in 24 hours</strong>
+                <span>Usually sooner during office hours, Monday to Saturday.</span>
+              </li>
+              <li>
+                <strong>We send a draft route</strong>
+                <span>Day by day, with stays, transport and guides. Change anything you like.</span>
+              </li>
+            </ol>
           </div>
-        </div>
-        <div class="contact-info-card">
-          <div class="info-body">
-            <h3 class="info-title">Follow Us</h3>
-            <div class="social-links">
-              <a href="https://www.facebook.com/ccbe.ambalangoda" target="_blank" rel="noopener" class="social-btn fb">Facebook</a>
-              <a href="https://www.instagram.com/ccbeamb" target="_blank" rel="noopener" class="social-btn ig">Instagram</a>
-              <a href="https://www.youtube.com/@ccbeinternational" target="_blank" rel="noopener" class="social-btn yt">YouTube</a>
-              <a href="https://www.tiktok.com/@cambridgecollege9" target="_blank" rel="noopener" class="social-btn tk">TikTok</a>
+
+          <div class="ct-side-card ct-side-dark">
+            <h3 class="ct-side-title">Office hours</h3>
+            <p class="ct-hours">{{ openHours }}</p>
+            <p class="ct-side-note">{{ topbarNote }}</p>
+            <div class="ct-social">
+              <a
+                v-for="s in socials"
+                :key="s.name"
+                :href="s.link"
+                class="ct-social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >{{ s.name }}</a>
             </div>
           </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ===== Map ===== -->
+    <section class="ct-section" aria-labelledby="ct-map-heading">
+      <div class="ct-wrap ct-map-grid">
+        <div class="ct-map-text">
+          <p class="ct-eyebrow">Find us</p>
+          <h2 id="ct-map-heading" class="ct-h2">Our office</h2>
+          <span class="ct-rule" aria-hidden="true"></span>
+          <p class="ct-lead">{{ address }}</p>
+          <p class="ct-lead">{{ openHours }}</p>
+          <a :href="mapsLink" class="ct-btn ct-btn-solid" target="_blank" rel="noopener noreferrer">
+            Open in Google Maps
+          </a>
+        </div>
+
+        <div class="ct-map-frame">
+          <iframe
+            :src="mapsEmbed"
+            title="Map showing our office location"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            allowfullscreen
+          ></iframe>
         </div>
       </div>
+    </section>
 
-      <h1 class="title" data-aos="fade-up" data-aos-duration="3000">
-        OUR <span class="highlight">BRANCH NETWORK</span>
-      </h1>
-
-      <div class="center-container-Branch">
-        <!-- Image Container -->
-        <div class="image-container">
-          <!-- Main Image -->
-          <img
-            data-aos="zoom-out"
-            data-aos-duration="2000"
-            width="390"
-            height="490"
-            :src="branchNetworkImage"
-            alt="Branch Network"
-            class="branch-image"
-          >
-
-          <!-- Ambalangoda -->
-          <div
-            class="point"
-            :style="{ top: '74.5%', left: '36%' }"
-            @click="navigateTo('/about/ambalangoda')"
-          >
-            <span class="point-tooltip">Ambalangoda College</span>
-          </div>
-
-          <!-- Galle -->
-          <div
-            class="point"
-            :style="{ top: '82%', left: '42%' }"
-            @click="navigateTo('/about/galle')"
-          >
-            <span class="point-tooltip">Galle College</span>
-          </div>
-
-          <!-- Matara -->
-          <div
-            class="point"
-            :style="{ top: '81%', left: '57%'}"
-            @click="navigateTo('/about/matara')"
-          >
-            <span class="point-tooltip point-tooltip-right">Matara College</span>
-          </div>
-
-          <!-- Piliyandala -->
-          <div
-            class="point"
-            :style="{ top: '64.8%', left: '36.5%' }"
-            @click="navigateTo('/about/piliyandala')"
-          >
-            <span class="point-tooltip">Piliyandala College</span>
-          </div>
-
-          <!-- Kalutara -->
-          <div
-            class="point"
-            :style="{ top: '65%', left: '30.5%' }"
-            @click="navigateTo('/about/kalutara')"
-          >
-            <span class="point-tooltip">Kalutara College</span>
-          </div>
-
-          <!-- Horana -->
-          <div
-            class="point"
-            :style="{ top: '68.5%', left: '34%' }"
-            @click="navigateTo('/about/horana')"
-          >
-            <span class="point-tooltip">Horana College</span>
-          </div>
-
-          <!-- Matugama -->
-          <div
-            class="point"
-            :style="{ top: '68.5%', left: '38.5%' }"
-            @click="navigateTo('/about/matugama')"
-          >
-            <span class="point-tooltip">Matugama College</span>
-          </div>
-
-          <!-- Beliatta -->
-          <div
-            class="point"
-            :style="{ top: '75.5%', left: '72%' }"
-            @click="navigateTo('/about/beliatta')"
-          >
-            <span class="point-tooltip">Beliatta College</span>
-          </div>
-
+    <!-- ===== Quick links ===== -->
+    <section class="ct-more" aria-label="More pages">
+      <div class="ct-wrap">
+        <p class="ct-more-label">Looking for something else?</p>
+        <div class="ct-more-links">
+          <a href="/" class="ct-pill">Back to home</a>
+          <a href="/about" class="ct-pill">About us</a>
+          <a href="/destinations" class="ct-pill">Destinations</a>
+          <a href="/gallery" class="ct-pill">Gallery</a>
         </div>
       </div>
+    </section>
+  </main>
 
-      <div v-if="selectedOffice" class="text-center">
-        <h3>{{ selectedOffice.name }}</h3>
-        <p>{{ selectedOffice.address }}</p>
-        <p>{{ selectedOffice.phone }}</p>
-      </div>
-
-      <!-- Branch Cards -->
-      <div class="branch-cards-grid" data-aos="fade-up" data-aos-duration="2000">
-        <div
-          v-for="(office, index) in offices"
-          :key="index"
-          class="branch-card"
-          :class="{ 'branch-card--active': selectedOffice && selectedOffice.name === office.name }"
-          @click="selectOffice(office)"
-        >
-          <div class="branch-card-body">
-            <h4 class="branch-card-name">{{ office.name }}</h4>
-            <p class="branch-card-addr">{{ office.address }}</p>
-            <a :href="'tel:' + office.phone.replace(/\s/g,'')" class="branch-card-phone" @click.stop>{{ office.phone }}</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Back to Home Link -->
-      <div class="home-link-section" data-aos="fade-up" data-aos-duration="1500">
-        <p>Looking for something else?</p>
-        <a href="/" class="home-link-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 9L12 2L21 9V20a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-          Back to Home
-        </a>
-        <div class="quick-nav-links">
-          <a href="/courses" class="qnl">Our Programmes</a>
-          <a href="/about" class="qnl">About CCBE</a>
-          <a href="/news" class="qnl">News & Events</a>
-          <a href="/corevalues" class="qnl">Core Values</a>
-        </div>
-      </div>
-
-    </div>
-    <ChatBot></ChatBot>
-    <FooterPage></FooterPage>
-  </div>
+  <ArrowButton></ArrowButton>
+  <FooterPage></FooterPage>
 </template>
 
 <script>
-import NavBar from "./NavBar.vue";
+import LankaNavBar from "./Lankanavbar.vue";
 import FooterPage from "./FooterPage.vue";
-import ChatBot from "./ChatBot.vue";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import ArrowButton from "./ArrowButton.vue";
+
+// Same local images the home page uses (src/assets/carousel)
+import imgNineArch from "@/assets/carousel/Ninearch.jpg";
+
+// Must have text, one @, a domain and a dot ending, e.g. name@example.com
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const todayISO = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
+};
+
+const emptyForm = () => ({
+  name: "",
+  email: "",
+  phone: "",
+  topic: "Planning a trip",
+  arrival: "",
+  people: 2,
+  message: "",
+});
 
 export default {
-  name: "ContactUs",
+  name: "ContactUsPage",
   components: {
-    NavBar,
+    LankaNavBar,
     FooterPage,
-    ChatBot
+    ArrowButton,
   },
   data() {
     return {
-      logo: require('@/assets/Logo.png'),
-      branchNetworkImage: require('@/assets/Branch_Network2.png'),
-      offices: [
-        { name: "Galle College",       address: "No 118, Old Matara Rd, Galle, 80000",                  phone: "+94 91 223 7373" },
-        { name: "Ambalangoda College", address: "No 97, New Rd, Ambalangoda, 80300",                    phone: "+94 91 225 2452" },
-        { name: "Matara College",      address: "No 352, Kumarathunga Mw, Matara, 81000",               phone: "+94 41 205 0200" },
-        { name: "Piliyandala College", address: "No 119, Moratuwa Rd, Suwarapola, Piliyandala, 10300",  phone: "+94 11 218 0008" },
-        { name: "Horana College",      address: "No 149, Graceland Circular Rd, Horana, 12400",         phone: "+94 34 220 5503" }, 
-        { name: "Kalutara College",    address: "No 85, Maha Waskaduwa, Waskaduwa, 12580",              phone: "+94 34 212 1210" },
-        { name: "Matugama College",    address: "No 57/D, Aluthgama Rd, Matugama, 12100",               phone: "+94 34 212 1477" },
-        { name: "Beliatta College",    address: "Opposite Bus Stand, No 50 Tangalle Rd, Beliatta 82400",phone: "+94 47 225 2175" },  
+      // ---- EDIT: contact details (keep in sync with the nav bar and footer) ----
+      brandName: "Ceylon Escapes",
+      phoneRaw: "+94776809002",
+      phoneDisplay: "+94 77 680 9002",
+      // WhatsApp needs the number in international format with no + and no spaces
+      whatsappNumber: "94776809002",
+      email: "lankaroundtrip@gmail.com",
+      address: "No 350/2, Ambalama Mountain, Kapuhempala, Galle, Sri Lanka",
+      openHours: "Mon – Sat, 8:30 am – 6:00 pm",
+      topbarNote: "Local guides · Free trip planning",
+      // Social links: replace with your real pages
+      socials: [
+        { name: "Instagram", link: "https://www.instagram.com/" },
+        { name: "Facebook", link: "https://www.facebook.com/" },
+        { name: "Telegram", link: "https://t.me/Kavee9902" },
       ],
-      selectedOffice: null,
+      // ---------------------------------------------------------------------------
+
+      heroBg: imgNineArch,
+      today: todayISO(),
+      topics: ["Planning a trip", "Day trip or excursion", "Hotels and stays", "A trip I have already booked", "Something else"],
+      form: emptyForm(),
+      errors: {},
+      status: "",
     };
   },
-  methods: {
-    navigateTo(route) { 
-      this.$router.push(route); 
+  computed: {
+    whatsappLink() {
+      const text = `Hello ${this.brandName}, I would like to plan a trip to Sri Lanka.`;
+      return `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(text)}`;
     },
-    selectOffice(office) { 
-      this.selectedOffice = office; 
+    mapsLink() {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(this.address)}`;
+    },
+    mapsEmbed() {
+      return `https://www.google.com/maps?q=${encodeURIComponent(this.address)}&output=embed`;
     },
   },
-  mounted() {
-    AOS.init();
+  methods: {
+    validate() {
+      const errors = {};
+      if (!this.form.name) {
+        errors.name = "Please enter your name.";
+      }
+      if (!EMAIL_REGEX.test(this.form.email || "")) {
+        errors.email = "Enter a valid email, for example name@example.com";
+      }
+      if (!this.form.message) {
+        errors.message = "Please tell us a little about what you need.";
+      }
+      this.errors = errors;
+      return Object.keys(errors).length === 0;
+    },
+    buildMessage() {
+      const f = this.form;
+      const lines = [
+        `Hello ${this.brandName},`,
+        "",
+        `Name: ${f.name}`,
+        `Email: ${f.email}`,
+        `Phone: ${f.phone || "-"}`,
+        `Topic: ${f.topic}`,
+        `Arrival date: ${f.arrival || "Not decided"}`,
+        `Travellers: ${f.people || 1}`,
+        "",
+        f.message,
+      ];
+      return lines.join("\n");
+    },
+    sendWhatsApp() {
+      if (!this.validate()) {
+        this.status = "";
+        return;
+      }
+      const url = `https://wa.me/${this.whatsappNumber}?text=${encodeURIComponent(this.buildMessage())}`;
+      window.open(url, "_blank", "noopener");
+      this.status = "WhatsApp is opening with your message ready to send.";
+    },
+    sendEmail() {
+      if (!this.validate()) {
+        this.status = "";
+        return;
+      }
+      const subject = `${this.form.topic} - ${this.form.name}`;
+      const url = `mailto:${this.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(this.buildMessage())}`;
+      window.location.href = url;
+      this.status = "Your email app is opening with your message ready to send.";
+    },
   },
 };
 </script>
 
 <style scoped>
-.container {
+/*
+  All class names on this page start with "ct-" so they can never clash with the
+  nav bar's global "lk-" styles.
+*/
+
+/* ===== TOKENS (same blue theme as the home page and footer) ===== */
+.ct-page {
+  --navy: #0b2a4a;
+  --blue: #1565c0;
+  --blue-bright: #1e88e5;
+  --sky: #8ec9ff;
+  --sand: #f6f1e7;
+  --sun: #f5b94a;
+  --text: #1f2933;
+  --muted: #52606d;
+  --danger: #b42318;
+  --shadow-sm: 0 4px 14px rgba(11, 42, 74, 0.08);
+  --shadow-md: 0 14px 34px rgba(11, 42, 74, 0.16);
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  font-family: var(--font-body);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+.ct-wrap {
+  position: relative;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
-  padding-top: 80px;
+  padding: 0 max(24px, 4vw);
+  box-sizing: border-box;
 }
 
-.title {
-  color: #FBB700;
-  text-align: center;
-  font-size: 2rem;
-  font-weight: bold;
-  margin-top: 30px;
-  margin-bottom: 10px;
-}
-
-.highlight { color: #FF5F15; }
-
-.subtitle {
-  font-size: 1.2rem !important;
-  color: #555 !important;
-  text-align: center !important;
-  margin: 20px 0 !important;
-  line-height: 1.5 !important;
-  font-weight: normal !important;
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-}
-
-#logo { display: block; }
-
-/* Contact Info Cards */
-.contact-info-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin: 32px 0 40px;
-}
-
-.contact-info-card {
-  background: #fff;
-  border: 1px solid #f0f0f0;
-  border-radius: 14px;
-  padding: 20px 18px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.contact-info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(251,183,0,0.14);
-}
-
-.info-body { flex: 1; }
-
-.info-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: #FBB700;
-  margin: 0 0 8px;
-}
-
-.info-body p {
-  font-size: 0.85rem;
-  color: #555;
-  margin: 3px 0;
-  line-height: 1.4;
-}
-
-.info-link {
-  color: #FF5F15;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.info-link:hover { text-decoration: underline; }
-
-.info-note {
-  font-size: 0.78rem !important;
-  color: #888 !important;
-  font-style: italic;
-}
-
-.social-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-
-.social-btn {
-  padding: 5px 14px;
-  border-radius: 30px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.25s;
-}
-
-.social-btn.fb { background: #1877f2; color: #fff; }
-.social-btn.fb:hover { background: #1565c0; }
-.social-btn.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
-.social-btn.ig:hover { opacity: 0.88; }
-.social-btn.yt { background: #dc2743; color: #fff; }
-.social-btn.tk { background: #333; color: #fff; }
-
-/* Branch Network Map */
-.center-container-Branch {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.ct-section {
   position: relative;
-  width: 390px;
-  height: 490px;
-  margin: 30px auto;
-}
-
-.image-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.branch-image {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.point {
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Main yellow dot */
-.point::before {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  background-color: rgb(255, 230, 0);
-  border-radius: 50%;
-  box-shadow: 0 0 18px rgba(255, 230, 0, 0.9);
-  animation: pulse-grow 2s infinite;
-}
-
-/* Glow wave effect */
-.point::after {
-  content: '';
-  position: absolute;
-  width: 15px;
-  height: 15px;
-  border: 2px solid rgba(255, 243, 7, 0.889);
-  border-radius: 50%;
-  animation: wave 2s infinite;
-}
-
-/* Tooltip beside point */
-.point-tooltip {
-  position: absolute;
-  left: 30px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: white;
-  color: black;
-  padding: 10px 18px;
-  border: 2px solid #222;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-  z-index: 100;
-}
-
-/* Tooltip for right side (Matara) */
-.point-tooltip-right {
-  left: auto;
-  right: 30px;
-}
-
-/* Show tooltip on hover */
-.point:hover .point-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Branch Cards */
-.branch-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 24px 0 40px;
-}
-
-.branch-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  padding: 96px 0;
   background: #fff;
-  border: 2px solid #f0f0f0;
-  border-radius: 14px;
-  padding: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+}
+.ct-sand {
+  background: var(--sand);
 }
 
-.branch-card:hover,
-.branch-card--active {
-  border-color: #FBB700;
-  box-shadow: 0 6px 20px rgba(251,183,0,0.16);
-  transform: translateY(-2px);
+/* ===== TYPE ===== */
+.ct-h2,
+.ct-hero-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-wrap: balance;
 }
-
-.branch-card-body { flex: 1; min-width: 0; }
-
-.branch-card-name {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin: 0 0 4px;
+.ct-h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.15;
   text-align: left;
+  text-transform: none;
+  color: var(--navy);
 }
-
-.branch-card-addr {
-  font-size: 0.78rem;
-  color: #888;
-  margin: 0 0 4px;
-  line-height: 1.3;
-  text-align: left;
-}
-
-.branch-card-phone {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #FF5F15;
-  text-decoration: none;
-  display: block;
-  text-align: left;
-}
-
-.branch-card-phone:hover { text-decoration: underline; }
-
-/* Back to Home */
-.home-link-section {
-  text-align: center;
-  padding: 32px 0 16px;
-}
-
-.home-link-section > p {
-  font-size: 0.95rem;
-  color: #888;
-  margin-bottom: 12px;
-}
-
-.home-link-btn {
+.ct-eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 11px 28px;
-  background: #FBB700;
-  color: #fff;
-  border-radius: 50px;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 0.8rem;
   font-weight: 700;
-  font-size: 0.95rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(251,183,0,0.3);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.ct-eyebrow::before {
+  content: "";
+  width: 28px;
+  height: 2px;
+  background: var(--sun);
+  border-radius: 2px;
+}
+.ct-rule {
+  display: block;
+  width: 72px;
+  height: 4px;
+  margin: 22px 0;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--sun), var(--blue-bright));
+}
+.ct-lead {
+  margin: 0 0 14px;
+  max-width: 50ch;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.ct-sub {
+  margin: 0 0 28px;
+  max-width: 56ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--muted);
 }
 
-.home-link-btn:hover {
-  background: #e0a500;
+/* ===== HERO ===== */
+.ct-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 72px 0 130px;
+  color: #fff;
+  background: var(--navy);
+}
+.ct-hero-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  /* the one deliberate motion on this page: a slow settle on load */
+  animation: ct-drift 14s ease-out forwards;
+}
+@keyframes ct-drift {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+.ct-hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(11, 42, 74, 0.9) 0%, rgba(21, 101, 192, 0.6) 100%);
+}
+.ct-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.ct-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 26px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+.ct-crumbs a {
+  color: var(--sky);
+  text-decoration: none;
+}
+.ct-crumbs a:hover {
+  text-decoration: underline;
+}
+.ct-hero-title {
+  margin: 0 0 18px;
+  max-width: 16ch;
+  font-size: clamp(2.2rem, 5.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-align: left;
+  text-transform: none;
+}
+.ct-hero-lead {
+  margin: 0 0 30px;
+  max-width: 54ch;
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+.ct-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.ct-hero-wave {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  z-index: 3;
+  width: 100%;
+  height: 60px;
+  display: block;
+  pointer-events: none;
+}
+
+/* ===== CONTACT CARDS ===== */
+.ct-cards-section {
+  padding: 0 0 80px;
+  margin-top: -20px;
+}
+.ct-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.ct-card {
+  padding: 28px 24px;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-top: 5px solid var(--sun);
+  border-radius: 18px;
+  box-shadow: var(--shadow-sm);
+}
+.ct-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  font-size: 1.3rem;
+  color: #fff;
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-bright) 100%);
+  border-radius: 14px;
+  box-shadow: 0 6px 14px rgba(21, 101, 192, 0.35);
+}
+.ct-card-title {
+  margin: 0 0 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.ct-card-text {
+  margin: 0 0 6px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+.ct-card-text a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.ct-card-text a:hover {
+  text-decoration: underline;
+}
+.ct-card-note {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* ===== FORM ===== */
+.ct-form-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.ct-form-card {
+  padding: 40px 36px;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-radius: 22px;
+  box-shadow: var(--shadow-md);
+}
+.ct-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 16px;
+}
+.ct-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.ct-field-full {
+  grid-column: 1 / -1;
+}
+.ct-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+.ct-field input,
+.ct-field select,
+.ct-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font: 500 0.95rem var(--font-body);
+  color: var(--text);
+  background: #fff;
+  border: 1.5px solid #cfe0f3;
+  border-radius: 12px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.ct-field textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+.ct-field input:focus,
+.ct-field select:focus,
+.ct-field textarea:focus {
+  outline: none;
+  border-color: var(--blue-bright);
+  box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.18);
+}
+.ct-field input::placeholder,
+.ct-field textarea::placeholder {
+  color: #93a6c0;
+}
+.ct-field .is-invalid {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+}
+.ct-error {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--danger);
+}
+.ct-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+.ct-status {
+  grid-column: 1 / -1;
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--blue);
+}
+
+/* ===== SIDE PANEL ===== */
+.ct-side {
+  display: grid;
+  gap: 20px;
+}
+.ct-side-card {
+  padding: 30px 28px;
+  background: #fff;
+  border: 1px solid #e3dccb;
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+}
+.ct-side-dark {
+  color: #fff;
+  background: linear-gradient(135deg, var(--navy) 0%, #12457a 100%);
+  border-color: var(--navy);
+}
+.ct-side-title {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.35rem;
+  color: var(--navy);
+}
+.ct-side-dark .ct-side-title {
+  color: #fff;
+}
+.ct-next {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: ct-step;
+}
+.ct-next li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 46px;
+  counter-increment: ct-step;
+}
+.ct-next li::before {
+  content: counter(ct-step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  font-family: var(--font-display);
+  color: var(--navy);
+  background: var(--sun);
+  border-radius: 50%;
+}
+.ct-next strong {
+  font-size: 1rem;
+  color: var(--navy);
+}
+.ct-next span {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.ct-hours {
+  margin: 0 0 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--sun);
+}
+.ct-side-note {
+  margin: 0 0 18px;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+.ct-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ct-social-link {
+  padding: 7px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+.ct-social-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--sun);
+}
+
+/* ===== MAP ===== */
+.ct-map-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.3fr;
+  gap: 56px;
+  align-items: center;
+}
+.ct-map-frame {
+  overflow: hidden;
+  border: 1px solid #e3dccb;
+  border-radius: 22px;
+  box-shadow: var(--shadow-md);
+  background: #e6f1fd;
+}
+.ct-map-frame iframe {
+  display: block;
+  width: 100%;
+  height: 380px;
+  border: 0;
+}
+
+/* ===== QUICK LINKS ===== */
+.ct-more {
+  padding: 8px 0 8px;
+  text-align: center;
+  background: #fff;
+}
+.ct-more-label {
+  margin: 0 0 14px;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+.ct-more-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+.ct-pill {
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--blue);
+  text-decoration: none;
+  border: 1.5px solid #cfe0f3;
+  border-radius: 999px;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.ct-pill:hover {
+  color: #fff;
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+/* ===== BUTTONS ===== */
+.ct-btn {
+  display: inline-block;
+  padding: 13px 28px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease;
+}
+.ct-btn:hover {
   transform: translateY(-2px);
 }
-
-.quick-nav-links {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 16px;
+.ct-btn-sun {
+  color: var(--navy);
+  background: var(--sun);
+  box-shadow: 0 8px 20px rgba(245, 185, 74, 0.4);
 }
-
-.qnl {
-  font-size: 0.85rem;
-  color: #FF5F15;
-  text-decoration: none;
-  font-weight: 500;
-  padding: 5px 14px;
-  border: 1px solid rgba(255,95,21,0.25);
-  border-radius: 30px;
-  transition: all 0.25s;
+.ct-btn-sun:hover {
+  background: #fff;
 }
-
-.qnl:hover {
-  background: #FF5F15;
+.ct-btn-solid {
   color: #fff;
-  border-color: #FF5F15;
+  background: var(--blue);
+  box-shadow: 0 6px 16px rgba(21, 101, 192, 0.3);
+}
+.ct-btn-solid:hover {
+  background: var(--navy);
+}
+.ct-btn-line {
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+}
+.ct-btn-line:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+}
+.ct-btn-whatsapp {
+  color: #fff;
+  background: #128c7e;
+  box-shadow: 0 6px 16px rgba(18, 140, 126, 0.35);
+}
+.ct-btn-whatsapp:hover {
+  background: #0e7266;
+}
+.ct-btn:focus-visible,
+.ct-pill:focus-visible,
+.ct-social-link:focus-visible,
+.ct-crumbs a:focus-visible,
+.ct-card-text a:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
 }
 
-.text-center {
-  text-align: center;
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1100px) {
+  .ct-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
-.text-center h3 { color: #FBB700; margin-bottom: 10px; }
-.text-center p  { color: #555; margin: 5px 0; font-size: 1rem; }
-
-/* Animations */
-@keyframes pulse-grow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); }
-  50%       { transform: translate(-50%, -50%) scale(1.2); }
-}
-
-@keyframes wave {
-  0%   { opacity: 1; transform: scale(1); }
-  100% { opacity: 0; transform: scale(3); }
-}
-
-/* Responsive */
 @media (max-width: 1024px) {
-  .contact-info-grid { grid-template-columns: repeat(2, 1fr); }
-  .branch-cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .ct-form-grid,
+  .ct-map-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
 }
 
 @media (max-width: 768px) {
-  .container { padding: 15px; padding-top: 70px; }
-  .title { font-size: 1.8rem; margin-top: 20px; }
-  .subtitle { font-size: 1.1rem; padding: 0 10px; }
-  .center-container-Branch { width: 300px; height: 380px; }
-  .contact-info-grid { grid-template-columns: 1fr; }
-  .branch-cards-grid { grid-template-columns: 1fr; }
-  #logo { width: 180px; height: auto; }
+  .ct-section {
+    padding: 60px 0;
+  }
+  .ct-cards-section {
+    padding: 0 0 56px;
+  }
+  .ct-hero {
+    padding: 48px 0 110px;
+  }
+  .ct-form-card {
+    padding: 28px 20px;
+  }
+  .ct-map-frame iframe {
+    height: 300px;
+  }
 }
 
-@media (max-width: 480px) {
-  .container { padding: 10px; padding-top: 60px; }
-  .title { font-size: 1.6rem; }
-  .subtitle { font-size: 1rem; }
-  .center-container-Branch { width: 250px; height: 320px; }
-  #logo { width: 150px; height: auto; }
-  .point { width: 22px; height: 22px; }
-  .point::before,
-  .point::after { width: 12px; height: 12px; }
-  .point-tooltip { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
-  .quick-nav-links { gap: 8px; }
+@media (max-width: 560px) {
+  .ct-cards,
+  .ct-form {
+    grid-template-columns: 1fr;
+  }
+  .ct-form-actions .ct-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ct-hero-photo {
+    animation: none;
+  }
+  .ct-btn,
+  .ct-pill,
+  .ct-social-link {
+    transition: none;
+  }
+  .ct-btn:hover {
+    transform: none;
+  }
 }
 </style>
