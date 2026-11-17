@@ -11,7 +11,7 @@
       <div class="lk-wrap lk-intro-grid">
         <div>
           <p class="lk-eyebrow">Discover Sri Lanka</p>
-          <h1 id="intro-heading" class="lk-h1" data-aos="fade-up" data-aos-duration="1500">
+          <h1 id="intro-heading" class="lk-h1">
             One island, a thousand ways to see it
           </h1>
           <span class="lk-rule" aria-hidden="true"></span>
@@ -474,7 +474,7 @@ export default {
   data() {
     return {
       // ---- EDIT: brand details (keep in sync with the footer) ----
-      brandName: "Your Tourism Brand",
+      brandName: "Ceylon Escapes",
       phoneRaw: "+94776809002",
       phoneDisplay: "+94 77 680 9002",
       // WhatsApp needs the number in international format with no + and no spaces
@@ -1005,6 +1005,7 @@ export default {
 /* ===== INTRO ===== */
 .lk-intro {
   overflow: hidden;
+  padding: 72px 0 80px;
   background: linear-gradient(180deg, #f2f8ff 0%, #ffffff 70%);
 }
 .lk-blob {
@@ -1030,8 +1031,16 @@ export default {
 .lk-intro-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 56px;
-  align-items: start;
+  gap: 64px;
+  align-items: center;
+}
+.lk-intro-grid > div:last-child {
+  padding-left: 28px;
+  border-left: 3px solid var(--sun);
+}
+.lk-intro .lk-lead:first-child {
+  font-size: 1.25rem;
+  color: var(--navy);
 }
 
 /* ===== ABOUT SRI LANKA ===== */
@@ -1922,6 +1931,10 @@ export default {
   .lk-intro-grid {
     grid-template-columns: 1fr;
     gap: 22px;
+  }
+  .lk-intro-grid > div:last-child {
+    padding-left: 0;
+    border-left: 0;
   }
   .lk-cta {
     padding: 60px 0;
