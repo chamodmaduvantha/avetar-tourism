@@ -45,7 +45,7 @@
           </div>
 
           <!-- Travel Inquiry form -->
-          <form v-else class="pt-form" @submit.prevent="submitInquiry">
+          <form v-else novalidate class="pt-form" @submit.prevent="submitInquiry">
             <div class="pt-field">
               <label for="p-name">Name</label>
               <input id="p-name" v-model.trim="travel.name" type="text" required placeholder="Your full name" />
@@ -53,7 +53,17 @@
 
             <div class="pt-field">
               <label for="p-email">Email</label>
-              <input id="p-email" v-model.trim="travel.email" type="email" required placeholder="you@example.com" />
+              <input
+                id="p-email"
+                v-model.trim="travel.email"
+                :class="{ 'is-invalid': travelEmailError }"
+                type="text"
+                inputmode="email"
+                autocomplete="email"
+                required
+                placeholder="you@example.com"
+              />
+              <p v-if="travelEmailError" class="pt-hint-error" role="alert">{{ travelEmailError }}</p>
             </div>
 
             <div class="pt-field">
@@ -249,6 +259,9 @@ const COUNTRIES = [
   "Other",
 ];
 
+// Must have text, one @, a domain and a dot ending, e.g. name@example.com
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
 const todayISO = () => {
   const d = new Date();
   d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -323,12 +336,43 @@ export default {
     };
   },
 
+  computed: {
+    travelEmailError() {
+      return this.emailMessage(this.travel.email);
+    },
+  },
+
   mounted() {
     document.title = "Plan My Trip | Ceylon Escapes";
   },
 
   methods: {
+    // Live inline hint under the email field
+    emailMessage(value) {
+      if (!value) return "";
+      return EMAIL_REGEX.test(value) ? "" : "Enter a valid email, for example name@example.com";
+    },
+
+    // Same validation rules as the navbar's inquiry form
     validate(form) {
+      if (!form.name) {
+        return "Please enter your name.";
+      }
+      if (!EMAIL_REGEX.test(form.email || "")) {
+        return "Please enter a valid email address, for example name@example.com.";
+      }
+      if (!form.arrival || !form.departure) {
+        return "Please choose your arrival and departure dates.";
+      }
+      if (!form.hotel || !form.hotel.length) {
+        return "Please select a hotel category.";
+      }
+      if ("mealPlan" in form && !form.mealPlan.length) {
+        return "Please select a meal plan.";
+      }
+      if (!(form.persons ?? form.adults) || (form.persons ?? form.adults) < 1) {
+        return "Please enter at least 1 person.";
+      }
       if (form.arrival && form.departure && form.departure < form.arrival) {
         return "Departure date must be on or after the arrival date.";
       }
@@ -600,6 +644,18 @@ export default {
 .pt-field input::placeholder,
 .pt-field textarea::placeholder {
   color: #93a6c0;
+}
+
+/* Invalid email state + inline hint */
+.pt-field input.is-invalid {
+  border-color: #b42318;
+  box-shadow: 0 0 0 3px rgba(180, 35, 24, 0.12);
+}
+.pt-hint-error {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #b42318;
 }
 
 /* Interest chips */
