@@ -89,8 +89,25 @@
         <div v-if="filteredTours.length" class="tr-grid">
           <article class="tr-card" v-for="t in filteredTours" :key="t.slug">
             <div class="tr-card-photo-wrap">
-              <div class="tr-card-photo" :style="{ backgroundImage: `url(${t.src})` }" role="img" :aria-label="t.alt"></div>
+              <div class="tr-card-photo" :style="{ backgroundImage: `url(${currentSrc(t)})` }" role="img" :aria-label="t.alt"></div>
               <span class="tr-card-badge">{{ dayLabel(t.days) }}</span>
+
+              <!-- Photo thumbnails: tap one to preview it on the card -->
+              <div v-if="t.shots && t.shots.length > 1" class="tr-thumbs" role="group" :aria-label="`Photos for ${t.title}`">
+                <button
+                  v-for="(s, i) in t.shots"
+                  :key="t.slug + '-shot-' + i"
+                  type="button"
+                  class="tr-thumb"
+                  :class="{ 'is-active': shotIndex(t) === i }"
+                  :aria-label="`Show photo ${i + 1} of ${t.shots.length}`"
+                  :aria-pressed="shotIndex(t) === i ? 'true' : 'false'"
+                  @click="setShot(t.slug, i)"
+                  @mouseenter="setShot(t.slug, i)"
+                >
+                  <span class="tr-thumb-img" :style="{ backgroundImage: `url(${s})` }"></span>
+                </button>
+              </div>
             </div>
 
             <div class="tr-card-body">
@@ -127,6 +144,38 @@
             <button type="button" class="tr-btn tr-btn-solid" @click="resetFilters">Clear filters</button>
             <a href="/plan-your-trip" class="tr-btn tr-btn-outline">Plan my own trip</a>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Places on our routes (photo tiles) ===== -->
+    <section class="tr-places" aria-labelledby="tr-places-heading">
+      <div class="tr-wrap">
+        <div class="tr-head tr-head-light">
+          <p class="tr-eyebrow tr-eyebrow-light">On our routes</p>
+          <h2 id="tr-places-heading" class="tr-h2 tr-h2-light">Places you will see</h2>
+          <p class="tr-sub tr-sub-light">
+            Pick a place to see every tour that stops there.
+          </p>
+        </div>
+
+        <div class="tr-places-grid">
+          <a
+            v-for="(p, i) in places"
+            :key="p.name"
+            href="#tr-list"
+            class="tr-place"
+            :class="{ 'is-big': i === 0 }"
+            @click="showPlace(p.name)"
+          >
+            <span class="tr-place-photo" :style="{ backgroundImage: `url(${p.src})` }"></span>
+            <span class="tr-place-shade"></span>
+            <span class="tr-place-text">
+              <span class="tr-place-region">{{ p.region }}</span>
+              <span class="tr-place-name">{{ p.name }}</span>
+              <span class="tr-place-more">See tours <i aria-hidden="true">&rarr;</i></span>
+            </span>
+          </a>
         </div>
       </div>
     </section>
@@ -198,6 +247,57 @@ import imgMirissa from "@/assets/carousel/Mirissa.jpg";
 import imgNineArch from "@/assets/carousel/Ninearch.jpg";
 import imgSigiriya from "@/assets/carousel/Seegiriya.png";
 
+// Hosted images (ImageKit)
+const CDN = "https://ik.imagekit.io/mg2l86pyn";
+const photos = {
+  kandy: [
+    `${CDN}/Kandy/Kandy.jpg`,
+    `${CDN}/Kandy/Kandy-1.jpg`,
+    `${CDN}/Kandy/Kandy-2.jpg`,
+    `${CDN}/Kandy/Kandy-3.jpg`,
+    `${CDN}/Kandy/Kandy-4.jpg`,
+    `${CDN}/Kandy/Kandy-5.jpg`,
+  ],
+  yala: [
+    `${CDN}/Yala/Yala.jpg`,
+    `${CDN}/Yala/Yala-1.jpg`,
+    `${CDN}/Yala/Yala-2.jpg`,
+    `${CDN}/Yala/Yala-3.jpg`,
+    `${CDN}/Yala/Yala-5.jpg`,
+    `${CDN}/Yala/Yala-6.jpg`,
+  ],
+  galle: [
+    `${CDN}/Gallefort/Galle-Fort.png`,
+    `${CDN}/Gallefort/GalleFort-1.jpg`,
+    `${CDN}/Gallefort/GalleFort-2.jpeg`,
+    `${CDN}/Gallefort/GalleFort-3.jpg`,
+    `${CDN}/Gallefort/GalleFort-4.jpg`,
+    `${CDN}/Gallefort/GalleFort-5.jpg`,
+  ],
+  sigiriya: [
+    `${CDN}/Seegiriya/Seegiriya.png`,
+    `${CDN}/Seegiriya/Seegiriya-1.jpg`,
+    `${CDN}/Seegiriya/Seegiriya-2.jpg`,
+    `${CDN}/Seegiriya/Seegiriya-3.jpg`,
+  ],
+  ancient: [
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-1.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-2.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-3.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-4.jpg`,
+  ],
+  ella: [
+    `${CDN}/NineArch/Ninearch.jpg`,
+    `${CDN}/NineArch/NineArch-1.jpg`,
+    `${CDN}/NineArch/NineArch-2.jpg`,
+  ],
+  ambuluwawa: `${CDN}/NineArch/Ambuluwawa.jpg`,
+  nuwaraEliya: [
+    `${CDN}/NineArch/Nuwara-Eliya-1.jpg`,
+    `${CDN}/NineArch/Nuwara-Eliya-2.jpg`,
+  ],
+};
+
 export default {
   name: "ToursPage",
   components: {
@@ -222,8 +322,23 @@ export default {
       activeCategory: "All",
       sortBy: "featured",
 
+      // Which thumbnail is showing on each card: { [slug]: index }
+      activeShot: {},
+
+      // Photo tiles in the "Places you will see" section.
+      // `name` is used as the search term, so it must appear in a tour's route.
+      places: [
+        { name: "Sigiriya", region: "Cultural Triangle", src: photos.sigiriya[1] },
+        { name: "Kandy", region: "Central highlands", src: photos.kandy[0] },
+        { name: "Ella", region: "Hill country", src: photos.ella[1] },
+        { name: "Galle", region: "South coast", src: photos.galle[1] },
+        { name: "Yala", region: "Southeast", src: photos.yala[0] },
+        { name: "Nuwara Eliya", region: "Tea country", src: photos.nuwaraEliya[0] },
+      ],
+
       // Placeholder tours: adjust days, routes, text and highlights to your real packages.
       // `slug` must be unique. `category` must match one of the filter names shown on the page.
+      // `shots` are the thumbnails on the card (the first one should match `src`).
       tours: [
         {
           slug: "ancient-cities-and-kandy",
@@ -234,6 +349,7 @@ export default {
           text: "Rock fortress, cave temples and the hill capital, with time to wander between them.",
           highlights: ["Sigiriya at sunrise", "Cave temple visit", "Temple of the Tooth"],
           src: imgSigiriya,
+          shots: [imgSigiriya, photos.sigiriya[1], photos.ancient[0], photos.kandy[0]],
           alt: "Sigiriya rock fortress",
         },
         {
@@ -245,6 +361,7 @@ export default {
           text: "Slow rail journeys, plantation walks and sunrise viewpoints in the cool hills.",
           highlights: ["Scenic train ride", "Tea estate visit", "Nine Arch Bridge"],
           src: imgNineArch,
+          shots: [imgNineArch, photos.ella[1], photos.nuwaraEliya[0], photos.kandy[1]],
           alt: "Train on the Nine Arch Bridge in Ella",
         },
         {
@@ -256,6 +373,7 @@ export default {
           text: "Fort town mornings, beach afternoons and a safari at first light.",
           highlights: ["Yala jeep safari", "Galle Fort walk", "Time on the beach"],
           src: imgBeach,
+          shots: [imgBeach, photos.yala[0], photos.yala[1], photos.galle[1]],
           alt: "Palm trees on a southern beach",
         },
         {
@@ -267,6 +385,7 @@ export default {
           text: "A short coastal escape built around an early boat trip in whale season, from December to March.",
           highlights: ["Morning boat trip", "Sunset at Galle Fort", "Beach time in Mirissa"],
           src: imgMirissa,
+          shots: [imgMirissa, photos.galle[2], photos.galle[3]],
           alt: "Beach at Mirissa",
         },
         {
@@ -278,6 +397,7 @@ export default {
           text: "Unhurried days by the sea, with Galle Fort in the cool of the afternoon and nothing booked in the middle.",
           highlights: ["Beachfront stay", "Snorkelling or surf lesson", "Fort town evenings"],
           src: imgMirissa,
+          shots: [imgMirissa, photos.galle[4], photos.galle[5]],
           alt: "Palm-lined beach in Mirissa",
         },
         {
@@ -289,6 +409,7 @@ export default {
           text: "An active week of viewpoints, waterfalls and walks, with train rides to rest between them.",
           highlights: ["Ambuluwawa viewpoint", "Hikes around Ella", "Hill-country train"],
           src: imgAmbuluwawa,
+          shots: [imgAmbuluwawa, photos.ella[2], photos.nuwaraEliya[1], photos.kandy[2]],
           alt: "Ambuluwawa tower above green hills",
         },
         {
@@ -300,6 +421,7 @@ export default {
           text: "Boutique stays, quiet mornings and a few well-chosen experiences, ending with days by the sea.",
           highlights: ["Boutique hotels", "Sunset on the Galle ramparts", "Private transfers"],
           src: imgBeach,
+          shots: [imgBeach, photos.sigiriya[2], photos.ella[1], photos.galle[0]],
           alt: "Quiet beach at sunset",
         },
         {
@@ -311,6 +433,7 @@ export default {
           text: "The classic loop at a relaxed pace: ancient cities, tea country by train, a safari and the southern coast.",
           highlights: ["Two UNESCO sites", "Scenic train ride", "Safari and fort town"],
           src: imgGalle,
+          shots: [imgGalle, photos.sigiriya[3], photos.kandy[3], photos.yala[2]],
           alt: "Galle Fort lighthouse by the sea",
         },
         {
@@ -322,6 +445,7 @@ export default {
           text: "Two weeks with room to breathe: the cultural north, the hills, the wildlife parks and a long finish on the coast.",
           highlights: ["Time at every stop", "Rest days built in", "Fully tailored route"],
           src: imgAmbuluwawa,
+          shots: [imgAmbuluwawa, photos.ancient[1], photos.yala[3], photos.ella[0]],
           alt: "Green hills near Kandy",
         },
       ],
@@ -385,6 +509,29 @@ export default {
       this.query = "";
       this.activeCategory = "All";
       this.sortBy = "featured";
+    },
+
+    // Card photo thumbnails
+    shotIndex(tour) {
+      return this.activeShot[tour.slug] || 0;
+    },
+    currentSrc(tour) {
+      const shots = tour.shots;
+      if (shots && shots.length) {
+        return shots[this.shotIndex(tour)] || tour.src;
+      }
+      return tour.src;
+    },
+    setShot(slug, index) {
+      if (this.activeShot[slug] === index) return;
+      this.activeShot = { ...this.activeShot, [slug]: index };
+    },
+
+    // "Places you will see" tiles: filter the list by that place
+    showPlace(name) {
+      this.activeCategory = "All";
+      this.sortBy = "featured";
+      this.query = name;
     },
   },
 };
@@ -463,6 +610,9 @@ export default {
   text-transform: none;
   color: var(--navy);
 }
+.tr-h2-light {
+  color: #fff;
+}
 .tr-eyebrow {
   display: inline-flex;
   align-items: center;
@@ -481,12 +631,18 @@ export default {
   background: var(--sun);
   border-radius: 2px;
 }
+.tr-eyebrow-light {
+  color: var(--sky);
+}
 .tr-sub {
   margin: 0;
   max-width: 60ch;
   font-size: 1.05rem;
   line-height: 1.6;
   color: var(--muted);
+}
+.tr-sub-light {
+  color: rgba(255, 255, 255, 0.85);
 }
 .tr-head {
   margin-bottom: 36px;
@@ -695,6 +851,51 @@ export default {
   border-radius: 999px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
 }
+
+/* Photo thumbnails on each card */
+.tr-thumbs {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  gap: 8px;
+  padding: 34px 14px 12px;
+  background: linear-gradient(to top, rgba(11, 42, 74, 0.8), rgba(11, 42, 74, 0));
+}
+.tr-thumb {
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}
+.tr-thumb:hover {
+  transform: translateY(-2px);
+  opacity: 1;
+}
+.tr-thumb.is-active {
+  border-color: var(--sun);
+  opacity: 1;
+}
+.tr-thumb:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
+.tr-thumb-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+
 .tr-card-body {
   display: flex;
   flex-direction: column;
@@ -787,6 +988,105 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   gap: 12px;
+}
+
+/* ===== PLACES YOU WILL SEE ===== */
+.tr-places {
+  position: relative;
+  padding: 88px 0 96px;
+  background: linear-gradient(180deg, var(--navy) 0%, #0e3560 100%);
+}
+.tr-places-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 230px;
+  gap: 18px;
+}
+.tr-place {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  color: #fff;
+  text-decoration: none;
+  background: var(--navy);
+  border-radius: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.tr-place:hover,
+.tr-place:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
+}
+.tr-place.is-big {
+  grid-row: span 2;
+}
+.tr-place-photo {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s ease;
+}
+.tr-place:hover .tr-place-photo,
+.tr-place:focus-visible .tr-place-photo {
+  transform: scale(1.08);
+}
+.tr-place-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11, 42, 74, 0.92) 0%, rgba(11, 42, 74, 0.2) 50%, rgba(11, 42, 74, 0) 75%);
+}
+.tr-place-text {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tr-place-region {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sun);
+}
+.tr-place-name {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.15;
+}
+.tr-place.is-big .tr-place-name {
+  font-size: 2.2rem;
+}
+.tr-place-more {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--sky);
+  transition: max-height 0.35s ease, opacity 0.35s ease, margin 0.35s ease;
+}
+.tr-place-more i {
+  font-style: normal;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.tr-place:hover .tr-place-more,
+.tr-place:focus-visible .tr-place-more {
+  max-height: 28px;
+  opacity: 1;
+  margin-top: 6px;
+}
+.tr-place:hover .tr-place-more i {
+  transform: translateX(5px);
+}
+.tr-place:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 3px;
 }
 
 /* ===== INCLUDED ===== */
@@ -978,11 +1278,18 @@ export default {
   .tr-incl-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .tr-places-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 220px;
+  }
 }
 
 @media (max-width: 768px) {
   .tr-section {
     padding: 56px 0 64px;
+  }
+  .tr-places {
+    padding: 60px 0 64px;
   }
   .tr-hero {
     padding: 48px 0 110px;
@@ -1004,6 +1311,16 @@ export default {
   .tr-incl-grid {
     grid-template-columns: 1fr;
   }
+  .tr-places-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 210px;
+  }
+  .tr-place.is-big {
+    grid-row: span 1;
+  }
+  .tr-place.is-big .tr-place-name {
+    font-size: 1.8rem;
+  }
   .tr-filters {
     flex-wrap: nowrap;
     overflow-x: auto;
@@ -1022,12 +1339,19 @@ export default {
   .tr-card-photo,
   .tr-btn,
   .tr-pill,
-  .tr-filter {
+  .tr-filter,
+  .tr-thumb,
+  .tr-place,
+  .tr-place-photo,
+  .tr-place-more {
     transition: none;
   }
   .tr-card:hover,
   .tr-btn:hover,
-  .tr-card:hover .tr-card-photo {
+  .tr-card:hover .tr-card-photo,
+  .tr-thumb:hover,
+  .tr-place:hover,
+  .tr-place:hover .tr-place-photo {
     transform: none;
   }
 }

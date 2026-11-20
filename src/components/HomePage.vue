@@ -262,6 +262,10 @@
           <!-- Details + list -->
           <div class="lk-map-side">
             <div class="lk-dm-panel" aria-live="polite">
+              <!-- Photo of the active destination (only when one is available) -->
+              <div v-if="activeDest.photo" class="lk-dm-panel-photo">
+                <img :key="activeDest.photo" :src="activeDest.photo" :alt="activeDest.name" loading="lazy" />
+              </div>
               <p class="lk-dm-panel-region">
                 <span class="lk-dm-panel-num">{{ String(activeIndex + 1).padStart(2, "0") }}</span>
                 {{ activeDest.region }}
@@ -463,6 +467,57 @@ import imgMirissa from "@/assets/carousel/Mirissa.jpg";
 import imgNineArch from "@/assets/carousel/Ninearch.jpg";
 import imgSigiriya from "@/assets/carousel/Seegiriya.png";
 
+// Hosted images (ImageKit)
+const CDN = "https://ik.imagekit.io/mg2l86pyn";
+const photos = {
+  kandy: [
+    `${CDN}/Kandy/Kandy.jpg`,
+    `${CDN}/Kandy/Kandy-1.jpg`,
+    `${CDN}/Kandy/Kandy-2.jpg`,
+    `${CDN}/Kandy/Kandy-3.jpg`,
+    `${CDN}/Kandy/Kandy-4.jpg`,
+    `${CDN}/Kandy/Kandy-5.jpg`,
+  ],
+  yala: [
+    `${CDN}/Yala/Yala.jpg`,
+    `${CDN}/Yala/Yala-1.jpg`,
+    `${CDN}/Yala/Yala-2.jpg`,
+    `${CDN}/Yala/Yala-3.jpg`,
+    `${CDN}/Yala/Yala-5.jpg`,
+    `${CDN}/Yala/Yala-6.jpg`,
+  ],
+  galle: [
+    `${CDN}/Gallefort/Galle-Fort.png`,
+    `${CDN}/Gallefort/GalleFort-1.jpg`,
+    `${CDN}/Gallefort/GalleFort-2.jpeg`,
+    `${CDN}/Gallefort/GalleFort-3.jpg`,
+    `${CDN}/Gallefort/GalleFort-4.jpg`,
+    `${CDN}/Gallefort/GalleFort-5.jpg`,
+  ],
+  sigiriya: [
+    `${CDN}/Seegiriya/Seegiriya.png`,
+    `${CDN}/Seegiriya/Seegiriya-1.jpg`,
+    `${CDN}/Seegiriya/Seegiriya-2.jpg`,
+    `${CDN}/Seegiriya/Seegiriya-3.jpg`,
+  ],
+  ancient: [
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-1.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-2.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-3.png`,
+    `${CDN}/AnuradhapuraPolonnaruwa/AnuradhapuraPolonnaruwa-4.jpg`,
+  ],
+  ella: [
+    `${CDN}/NineArch/Ninearch.jpg`,
+    `${CDN}/NineArch/NineArch-1.jpg`,
+    `${CDN}/NineArch/NineArch-2.jpg`,
+  ],
+  ambuluwawa: `${CDN}/NineArch/Ambuluwawa.jpg`,
+  nuwaraEliya: [
+    `${CDN}/NineArch/Nuwara-Eliya-1.jpg`,
+    `${CDN}/NineArch/Nuwara-Eliya-2.jpg`,
+  ],
+};
+
 export default {
   name: "HelloWorld",
   components: {
@@ -553,6 +608,7 @@ export default {
       ],
 
       // Pins: lat/lng are projected onto the SVG automatically. `side` is the label side.
+      // `photo` (optional) shows a picture in the detail panel when the pin is active.
       mapDestinations: [
         {
           name: "Colombo",
@@ -571,6 +627,7 @@ export default {
           lat: 6.03,
           lng: 80.22,
           side: "l",
+          photo: photos.galle[0],
           text: "A UNESCO-listed Dutch fort town of ramparts, lighthouse sunsets, boutique cafés and cobbled lanes.",
           tags: ["Heritage", "Sunset walks", "Cafés"],
         },
@@ -581,6 +638,7 @@ export default {
           lat: 5.95,
           lng: 80.45,
           side: "r",
+          photo: imgMirissa,
           text: "Palm-lined beaches, surf breaks and whale watching boat trips in season.",
           tags: ["Beaches", "Whale watching", "Surf"],
         },
@@ -591,6 +649,7 @@ export default {
           lat: 6.37,
           lng: 81.4,
           side: "r",
+          photo: photos.yala[0],
           text: "Early-morning jeep safaris through leopard country, with elephants, crocodiles and rich birdlife.",
           tags: ["Safari", "Wildlife", "Nature"],
         },
@@ -601,6 +660,7 @@ export default {
           lat: 6.87,
           lng: 81.05,
           side: "r",
+          photo: photos.ella[0],
           text: "Scenic train rides, tea hills, waterfalls and the famous Nine Arch Bridge.",
           tags: ["Train ride", "Hiking", "Tea hills"],
         },
@@ -611,6 +671,7 @@ export default {
           lat: 7.29,
           lng: 80.63,
           side: "r",
+          photo: photos.kandy[0],
           text: "The hill capital, home to the Temple of the Tooth, a peaceful lake and misty mountain views.",
           tags: ["Culture", "Temples", "Gardens"],
         },
@@ -621,6 +682,7 @@ export default {
           lat: 7.96,
           lng: 80.76,
           side: "r",
+          photo: photos.sigiriya[0],
           text: "Climb the ancient rock fortress at sunrise and look out over jungle and lakes.",
           tags: ["UNESCO site", "Sunrise climb", "History"],
         },
@@ -631,6 +693,7 @@ export default {
           lat: 8.35,
           lng: 80.4,
           side: "l",
+          photo: photos.ancient[0],
           text: "Two ancient capitals of great dagobas, sacred Bodhi tree, royal ruins and carved Buddha statues, best explored by bicycle.",
           tags: ["UNESCO sites", "Ruins", "Cycling"],
         },
@@ -656,8 +719,7 @@ export default {
       animationFrames: [],
       observer: null,
 
-      // Yala and Nuwara Eliya still use placeholders: add Yala.jpg / Nuwaraeliya.jpg
-      // to src/assets/carousel, import them above and swap the `src` values.
+      // Kandy, Yala and Nuwara Eliya now use the hosted ImageKit photos.
       destinations: [
         {
           name: "Sigiriya",
@@ -679,7 +741,7 @@ export default {
           name: "Kandy",
           region: "Central highlands",
           tagline: "Temple of the Tooth and misty hill views.",
-          src: imgAmbuluwawa,
+          src: photos.kandy[0],
           link: "#kandy",
           size: "",
         },
@@ -695,7 +757,7 @@ export default {
           name: "Yala",
           region: "Southeast",
           tagline: "Early-morning safaris in leopard country.",
-          src: "https://picsum.photos/seed/lk-yala/800/600",
+          src: photos.yala[0],
           link: "#yala",
           size: "",
         },
@@ -711,7 +773,7 @@ export default {
           name: "Nuwara Eliya",
           region: "Tea country",
           tagline: "Cool air, colonial charm and rolling estates.",
-          src: "https://picsum.photos/seed/lk-nuwara/1200/600",
+          src: photos.nuwaraEliya[0],
           link: "#nuwara-eliya",
           size: "is-wide",
         },
@@ -724,6 +786,20 @@ export default {
         { src: imgGalle, caption: "Galle Fort" },
         { src: imgMirissa, caption: "Mirissa" },
         { src: imgBeach, caption: "Southern shores" },
+        { src: photos.kandy[0], caption: "Kandy" },
+        { src: photos.yala[0], caption: "Yala safari" },
+        { src: photos.sigiriya[1], caption: "Sigiriya Rock" },
+        { src: photos.ancient[0], caption: "Anuradhapura" },
+        { src: photos.galle[1], caption: "Galle ramparts" },
+        { src: photos.kandy[1], caption: "Kandy lake" },
+        { src: photos.nuwaraEliya[0], caption: "Nuwara Eliya" },
+        { src: photos.yala[1], caption: "Wild Yala" },
+        { src: photos.ella[1], caption: "Ella" },
+        { src: photos.ancient[1], caption: "Polonnaruwa" },
+        { src: photos.kandy[2], caption: "Hill capital" },
+        { src: photos.nuwaraEliya[1], caption: "Tea country" },
+        { src: photos.galle[2], caption: "Fort sunset" },
+        { src: photos.yala[2], caption: "Leopard country" },
       ],
 
       // Placeholder trips: adjust durations, routes and links to your real packages.
@@ -1407,6 +1483,30 @@ export default {
   border-radius: 20px;
   box-shadow: var(--shadow-sm);
 }
+.lk-dm-panel-photo {
+  height: 190px;
+  margin: 0 0 20px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #e6f1fd;
+}
+.lk-dm-panel-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: lk-photo-in 0.45s ease;
+}
+@keyframes lk-photo-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 .lk-dm-panel-region {
   display: flex;
   align-items: center;
@@ -1532,10 +1632,10 @@ export default {
   will-change: transform;
 }
 .lk-track-left {
-  animation: lk-scroll-left 45s linear infinite;
+  animation: lk-scroll-left 90s linear infinite;
 }
 .lk-track-right {
-  animation: lk-scroll-right 55s linear infinite;
+  animation: lk-scroll-right 110s linear infinite;
 }
 .lk-marquee:hover .lk-track {
   animation-play-state: paused;
@@ -1960,6 +2060,9 @@ export default {
   .lk-dm-panel {
     padding: 24px 22px 22px;
   }
+  .lk-dm-panel-photo {
+    height: 160px;
+  }
 }
 
 @media (max-width: 560px) {
@@ -2016,6 +2119,9 @@ export default {
     opacity: 0.6;
   }
   .lk-cloud {
+    animation: none;
+  }
+  .lk-dm-panel-photo img {
     animation: none;
   }
   .lk-dest:hover,
